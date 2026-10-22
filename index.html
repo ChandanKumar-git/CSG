@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Happy Birthday, Gullu ♡</title>
+    <title>For Gullu · 26 October</title>
     <meta
       name="description"
-      content="A little corner of the internet made just for you — with love, from your best friend."
+      content="A little digital world made for Gullu — with respect, care, and friendship."
     />
-    <meta name="theme-color" content="#c96f83" />
+    <meta name="theme-color" content="#FAF7F0" />
 
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" />
     <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
@@ -19,477 +19,766 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Dancing+Script:wght@500;700&family=Great+Vibes&family=Homemade+Apple&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Poppins:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,700&family=Caveat:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
-    <canvas id="petals" aria-hidden="true"></canvas>
+    <canvas id="sparkles" aria-hidden="true"></canvas>
 
-    <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+    <!-- subtle hearts / dots / stars floating across the whole deck -->
+    <div class="floaters" aria-hidden="true">
+      <span class="floater f-heart" style="--l:8%;--t:18%;--d:0s"></span>
+      <span class="floater f-star"  style="--l:88%;--t:12%;--d:1.4s"></span>
+      <span class="floater f-dot"   style="--l:14%;--t:76%;--d:2.1s"></span>
+      <span class="floater f-flower" style="--l:92%;--t:68%;--d:0.6s"></span>
+      <span class="floater f-sparkle" style="--l:48%;--t:8%;--d:1.9s"></span>
+      <span class="floater f-sparkle" style="--l:52%;--t:88%;--d:2.6s"></span>
+    </div>
 
-    <main class="slider" id="slider">
+    <div class="top-progress" aria-hidden="true"><span id="top-progress-bar"></span></div>
+    <div class="slide-counter" aria-hidden="true">
+      <span id="slide-current">01</span>
+      <span class="sc-slash">/</span>
+      <span id="slide-total">20</span>
+    </div>
+
+    <main class="deck" id="deck">
 
       <!-- ============================================================
-           SLIDE 1 · GIFT CUBE HERO
-           Tap the gift → petals bloom outward → photo02 polaroid rises up.
+           01 · WELCOME
            ============================================================ -->
-      <section class="slide slide-cube-hero" data-slide>
-        <div class="stickers">
-          <span class="sticker" style="top:10%;left:8%">🎈</span>
-          <span class="sticker" style="top:14%;right:10%">🎈</span>
-          <span class="sticker" style="bottom:18%;left:12%">✨</span>
-          <span class="sticker" style="bottom:14%;right:14%">💗</span>
-          <span class="sticker" style="top:26%;left:22%">🌸</span>
-          <span class="sticker" style="top:22%;right:24%">🌟</span>
-          <span class="sticker" style="bottom:30%;right:8%">🌷</span>
-          <span class="sticker" style="bottom:24%;left:6%">💫</span>
+      <section class="slide slide-welcome" data-slide>
+        <!-- floating decorations across the welcome -->
+        <div class="w-deco" aria-hidden="true">
+          <span class="w-balloon b1"></span>
+          <span class="w-balloon b2"></span>
+          <span class="w-balloon b3"></span>
+          <span class="w-balloon b4"></span>
+          <span class="w-confetti c1"></span>
+          <span class="w-confetti c2"></span>
+          <span class="w-confetti c3"></span>
+          <span class="w-confetti c4"></span>
+          <span class="w-confetti c5"></span>
+          <span class="w-confetti c6"></span>
+          <span class="w-leaf wl1">
+            <svg viewBox="0 0 60 60"><path d="M30 10 C45 25, 50 40, 30 55 C10 40, 15 25, 30 10 Z" fill="none" stroke="currentColor" stroke-width="1"/><path d="M30 15 L30 50" stroke="currentColor" stroke-width="0.8" fill="none"/></svg>
+          </span>
+          <span class="w-leaf wl2">
+            <svg viewBox="0 0 60 60"><path d="M30 10 C45 25, 50 40, 30 55 C10 40, 15 25, 30 10 Z" fill="none" stroke="currentColor" stroke-width="1"/><path d="M30 15 L30 50" stroke="currentColor" stroke-width="0.8" fill="none"/></svg>
+          </span>
         </div>
 
-        <div class="hero-inner">
-          <p class="eyebrow">a little letter, just for you</p>
-          <h1 class="hero-title">
-            <span class="line-1">happy birthday,</span>
-            <span class="line-2" id="friend-name">Gullu</span>
-          </h1>
-          <p class="hero-fullname">CS GURLEEN KAUR <span class="dot-sep">·</span> my favourite human</p>
-
-          <div class="gift-stage" id="gift-stage">
-            <div class="cube-stage">
-              <div class="cube" id="hero-cube" tabindex="0" role="button" aria-label="tap the gift to unwrap">
-                <div class="face face-front">
-                  <div class="gift">
-                    <span class="ribbon ribbon-v"></span>
-                    <span class="ribbon ribbon-h"></span>
-                    <span class="bow">🎀</span>
-                    <span class="tap-hint">tap to unwrap ✨</span>
-                  </div>
-                </div>
-                <div class="face face-back"><span class="face-emoji">💗</span></div>
-                <div class="face face-right"><span class="face-emoji">🌸</span></div>
-                <div class="face face-left"><span class="face-emoji">✨</span></div>
-                <div class="face face-top"><span class="face-emoji">🌟</span></div>
-                <div class="face face-bottom"><span class="face-emoji">🎂</span></div>
-              </div>
-              <div class="orbit" aria-hidden="true">
-                <span class="orbit-sticker" style="--i:0">💗</span>
-                <span class="orbit-sticker" style="--i:1">✨</span>
-                <span class="orbit-sticker" style="--i:2">🌸</span>
-                <span class="orbit-sticker" style="--i:3">🌷</span>
-                <span class="orbit-sticker" style="--i:4">🌟</span>
-                <span class="orbit-sticker" style="--i:5">💫</span>
-              </div>
-            </div>
-
-            <!-- Hidden polaroid card, revealed after cube-bloom -->
-            <div class="reveal-card" id="reveal-card" aria-hidden="true">
-              <div class="reveal-polaroid">
-                <div class="polaroid-photo">
-                  <img src="./images/photo02.jpg" alt="a memory" />
-                </div>
-                <p class="reveal-caption">chapter one · when i met the sun</p>
-              </div>
-              <p class="reveal-quote">"some people don't enter your life — they arrive like light in a room that forgot its window."</p>
-            </div>
-          </div>
-
-          <p class="chapter-count">tap the gift · then swipe →</p>
+        <div class="welcome-ornament top" aria-hidden="true">
+          <svg viewBox="0 0 120 20"><path d="M0 10 H40 M80 10 H120" stroke="currentColor" stroke-width="0.6" fill="none" stroke-linecap="round"/><circle cx="60" cy="10" r="2.4" fill="currentColor"/><circle cx="48" cy="10" r="1" fill="currentColor"/><circle cx="72" cy="10" r="1" fill="currentColor"/></svg>
         </div>
+
+        <p class="eyebrow">a little something for someone special</p>
+
+        <h1 class="welcome-title">
+          For my favourite human,
+          <span class="script-name">Gullu.</span>
+        </h1>
+
+        <p class="welcome-lead">
+          Some people make life a little softer, brighter, and more
+          beautiful just by being themselves.
+        </p>
+
+        <p class="welcome-date">
+          <span class="dot"></span>
+          26&nbsp;OCTOBER&nbsp;·&nbsp;GULLU'S&nbsp;DAY
+          <span class="dot"></span>
+        </p>
+
+        <button class="btn primary" data-next>
+          Open Your Little Surprise
+          <span class="btn-glyph" aria-hidden="true">✦</span>
+        </button>
+
+        <p class="tap-hint" aria-hidden="true">tap the button, or use the arrows →</p>
       </section>
 
       <!-- ============================================================
-           SLIDE 2 · ISABELLA (pink glitter scrapbook, torn-paper title)
+           02 · LETTER
            ============================================================ -->
-      <section class="slide slide-isabella" data-slide>
-        <div class="glitter-bg" aria-hidden="true"></div>
-
-        <div class="torn-title">
-          <p class="brush-line-1">HAPPY</p>
-          <p class="brush-line-2">BIRTHDAY</p>
-          <p class="brush-script">Gullu <span>♡</span></p>
+      <section class="slide slide-letter" data-slide>
+        <div class="chapter-marker">
+          <span class="cm-num">01</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">the letter</span>
         </div>
 
-        <div class="isabella-polaroids">
-          <div class="iso-polaroid iso-p1">
-            <div class="polaroid-photo"><img src="./images/photo04.jpg" alt="a memory" /></div>
-          </div>
-          <div class="iso-polaroid iso-p2">
-            <div class="polaroid-photo"><img src="./images/photo05.jpg" alt="a memory" /></div>
-          </div>
-        </div>
+        <article class="letter-paper">
+          <div class="paper-corner tl" aria-hidden="true"></div>
+          <div class="paper-corner tr" aria-hidden="true"></div>
+          <div class="paper-corner bl" aria-hidden="true"></div>
+          <div class="paper-corner br" aria-hidden="true"></div>
 
-        <!-- Floating photo03 in corner -->
-        <div class="floating-polaroid floating-tl" aria-hidden="true">
-          <div class="polaroid-inner"><img src="./images/photo03.jpg" alt="" /></div>
-          <span class="polaroid-tape"></span>
-          <span class="polaroid-caption">random tuesday ♡</span>
-        </div>
-      </section>
+          <h2 class="letter-h">Dear Gullu,</h2>
 
-      <!-- ============================================================
-           SLIDE 3 · CELESTIAL (dark arch, gold constellations, photo07)
-           ============================================================ -->
-      <section class="slide slide-celestial" data-slide>
-        <div class="star-field" aria-hidden="true"></div>
-
-        <svg class="constellation constellation-l" viewBox="0 0 120 220" aria-hidden="true">
-          <g fill="none" stroke="#d4b874" stroke-width="0.8" stroke-linecap="round">
-            <path d="M20 20 L48 40 L30 70 L60 90 L38 130 L64 150 L40 190" />
-            <circle cx="20" cy="20" r="2.4" fill="#e8cf8c" />
-            <circle cx="48" cy="40" r="2" fill="#e8cf8c" />
-            <circle cx="30" cy="70" r="2.6" fill="#e8cf8c" />
-            <circle cx="60" cy="90" r="2" fill="#e8cf8c" />
-            <circle cx="38" cy="130" r="2.4" fill="#e8cf8c" />
-            <circle cx="64" cy="150" r="2" fill="#e8cf8c" />
-            <circle cx="40" cy="190" r="2.6" fill="#e8cf8c" />
-          </g>
-          <g fill="#d4b874">
-            <path d="M85 30 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z" />
-            <path d="M95 110 l1.4 4.4 4.4 1.4 -4.4 1.4 -1.4 4.4 -1.4 -4.4 -4.4 -1.4 4.4 -1.4z" />
-            <path d="M78 175 l1.8 5 5 1.8 -5 1.8 -1.8 5 -1.8 -5 -5 -1.8 5 -1.8z" />
-          </g>
-        </svg>
-
-        <svg class="constellation constellation-r" viewBox="0 0 120 220" aria-hidden="true">
-          <g fill="none" stroke="#d4b874" stroke-width="0.8" stroke-linecap="round">
-            <path d="M100 25 L70 45 L92 78 L60 100 L88 132 L58 158 L84 190" />
-            <circle cx="100" cy="25" r="2.4" fill="#e8cf8c" />
-            <circle cx="70" cy="45" r="2" fill="#e8cf8c" />
-            <circle cx="92" cy="78" r="2.6" fill="#e8cf8c" />
-            <circle cx="60" cy="100" r="2" fill="#e8cf8c" />
-            <circle cx="88" cy="132" r="2.4" fill="#e8cf8c" />
-            <circle cx="58" cy="158" r="2" fill="#e8cf8c" />
-            <circle cx="84" cy="190" r="2.6" fill="#e8cf8c" />
-          </g>
-          <g fill="#d4b874">
-            <path d="M32 35 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z" />
-            <path d="M22 115 l1.4 4.4 4.4 1.4 -4.4 1.4 -1.4 4.4 -1.4 -4.4 -4.4 -1.4 4.4 -1.4z" />
-            <path d="M40 180 l1.8 5 5 1.8 -5 1.8 -1.8 5 -1.8 -5 -5 -1.8 5 -1.8z" />
-          </g>
-        </svg>
-
-        <h2 class="celestial-title">
-          <span class="ct-1">HAPPY</span>
-          <span class="ct-2"><em>BIRTHDAY</em></span>
-        </h2>
-
-        <div class="celestial-arch">
-          <svg class="arch-svg" viewBox="0 0 320 460" aria-hidden="true">
-            <defs>
-              <clipPath id="arch-clip">
-                <path d="M40 220 A120 120 0 0 1 280 220 L280 440 L40 440 Z" />
-              </clipPath>
-            </defs>
-            <path d="M40 220 A120 120 0 0 1 280 220 L280 440 L40 440 Z"
-                  fill="none" stroke="#d4b874" stroke-width="1.6" />
-            <image href="./images/photo07.jpg" x="40" y="100" width="240" height="340"
-                   preserveAspectRatio="xMidYMid slice" clip-path="url(#arch-clip)" />
-            <circle cx="40" cy="290" r="10" fill="#d4b874" opacity="0.85" />
-            <circle cx="280" cy="360" r="10" fill="#d4b874" opacity="0.85" />
-          </svg>
-          <div class="celestial-emblem">
-            <svg viewBox="0 0 60 60" aria-hidden="true">
-              <circle cx="30" cy="30" r="14" fill="#0a0a1a" stroke="#d4b874" stroke-width="1.4" />
-              <path d="M30 20 A10 10 0 1 0 30 40 A8 8 0 1 1 30 20" fill="#d4b874" />
-              <g stroke="#d4b874" stroke-width="1" fill="none">
-                <line x1="30" y1="4"  x2="30" y2="12" />
-                <line x1="30" y1="48" x2="30" y2="56" />
-                <line x1="4"  y1="30" x2="12" y2="30" />
-                <line x1="48" y1="30" x2="56" y2="30" />
-                <line x1="10" y1="10" x2="16" y2="16" />
-                <line x1="44" y1="44" x2="50" y2="50" />
-                <line x1="10" y1="50" x2="16" y2="44" />
-                <line x1="44" y1="16" x2="50" y2="10" />
-              </g>
-            </svg>
-          </div>
-        </div>
-
-        <p class="celestial-name">Gullu</p>
-
-        <!-- Floating photo06 -->
-        <div class="floating-polaroid floating-br dark" aria-hidden="true">
-          <div class="polaroid-inner"><img src="./images/photo06.jpg" alt="" /></div>
-          <span class="polaroid-tape"></span>
-          <span class="polaroid-caption gold">stardust ✦</span>
-        </div>
-      </section>
-
-      <!-- ============================================================
-           SLIDE 4 · GOOGLE NOTEBOOK (search page scrapbook, 3 polaroids)
-           ============================================================ -->
-      <section class="slide slide-google" data-slide>
-        <div class="notebook">
-          <div class="notebook-holes" aria-hidden="true"></div>
-          <div class="washi washi-tl" aria-hidden="true"></div>
-          <div class="washi washi-tr" aria-hidden="true"></div>
-
-          <div class="google-inner">
-            <div class="google-header">
-              <h2 class="google-logo">
-                <span style="color:#4285F4">G</span><span style="color:#EA4335">o</span><span style="color:#FBBC05">o</span><span style="color:#4285F4">g</span><span style="color:#34A853">l</span><span style="color:#EA4335">e</span>
-              </h2>
-              <span class="doodle doodle-star">✦</span>
-              <span class="doodle doodle-cake">🎂</span>
-              <span class="doodle doodle-heart">♡</span>
-            </div>
-
-            <div class="search-bar">
-              <span class="search-ico">🔍</span>
-              <span class="search-text">happy birthday gullu</span>
-              <span class="search-mic">🎙️</span>
-            </div>
-
-            <div class="search-tabs">
-              <span class="tab active">◉ All</span>
-              <span class="tab">▤ Images</span>
-              <span class="tab">▶ Videos</span>
-              <span class="tab">≡ News</span>
-              <span class="tab">◇ Maps</span>
-              <span class="tab">⋮ More</span>
-            </div>
-
-            <p class="results-line">About 1,250,000,000 results (0.45 seconds)</p>
-            <p class="did-you-mean">Did you mean: <a>happy birthday to you, forever ♡</a></p>
-
-            <p class="images-label">Images <span>⋮</span></p>
-
-            <div class="g-polaroids">
-              <div class="g-polaroid gp-1">
-                <span class="washi-tape wt-green"></span>
-                <div class="polaroid-photo"><img src="./images/photo08.jpg" alt="a memory" /></div>
-                <div class="polaroid-lines"><span>♡</span><span class="line"></span></div>
-              </div>
-              <div class="g-polaroid gp-2">
-                <span class="washi-tape wt-dots"></span>
-                <div class="polaroid-photo"><img src="./images/photo11.jpg" alt="a memory" /></div>
-                <div class="polaroid-lines"><span>♡</span><span class="line"></span></div>
-              </div>
-              <div class="g-polaroid gp-3">
-                <span class="washi-tape wt-blue"></span>
-                <div class="polaroid-photo"><img src="./images/photo14.jpg" alt="a memory" /></div>
-                <div class="polaroid-lines"><span>♡</span><span class="line"></span></div>
-              </div>
-            </div>
-
-            <p class="more-images">→ More images for our friendship</p>
-
-            <div class="wish-card">
-              <span class="wish-tape" aria-hidden="true"></span>
-              <p>Wishing you a day <br />filled with joy, love and <br /><em>wonderful memories!</em> ♡</p>
-              <span class="wish-magnify" aria-hidden="true">🔍</span>
-            </div>
-
-            <span class="paperclip" aria-hidden="true">📎</span>
-            <span class="doodle-leaf" aria-hidden="true">🌿</span>
-          </div>
-        </div>
-
-        <!-- Floating photo09 -->
-        <div class="floating-polaroid floating-br" aria-hidden="true">
-          <div class="polaroid-inner"><img src="./images/photo09.jpg" alt="" /></div>
-          <span class="polaroid-tape"></span>
-          <span class="polaroid-caption">us being us ♡</span>
-        </div>
-      </section>
-
-      <!-- ============================================================
-           SLIDE 5 · WARM COLLAGE (photo15 center + 4 corner photos)
-           ============================================================ -->
-      <section class="slide slide-collage" data-slide>
-        <div class="collage-bg" aria-hidden="true">
-          <div class="grid-corner"></div>
-          <div class="collage-doodle butterfly-1" aria-hidden="true">
-            <svg viewBox="0 0 40 32"><path d="M20 16 C10 4, 0 8, 4 20 C8 30, 18 24, 20 16 C22 24, 32 30, 36 20 C40 8, 30 4, 20 16 Z" fill="#e8b4a4" stroke="#8a5a4e" stroke-width="0.6"/></svg>
-          </div>
-          <div class="collage-doodle butterfly-2" aria-hidden="true">
-            <svg viewBox="0 0 40 32"><path d="M20 16 C10 4, 0 8, 4 20 C8 30, 18 24, 20 16 C22 24, 32 30, 36 20 C40 8, 30 4, 20 16 Z" fill="#d4a58c" stroke="#7a4a3e" stroke-width="0.6"/></svg>
-          </div>
-          <div class="collage-doodle planet-1" aria-hidden="true">
-            <svg viewBox="0 0 60 40"><ellipse cx="30" cy="20" rx="10" ry="10" fill="none" stroke="#8a5a4e" stroke-width="0.8"/><ellipse cx="30" cy="20" rx="24" ry="4" fill="none" stroke="#8a5a4e" stroke-width="0.8" transform="rotate(-20 30 20)"/></svg>
-          </div>
-          <div class="collage-doodle planet-2" aria-hidden="true">
-            <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="10" fill="none" stroke="#8a5a4e" stroke-width="0.8"/><circle cx="20" cy="20" r="14" fill="none" stroke="#8a5a4e" stroke-width="0.6"/></svg>
-          </div>
-        </div>
-
-        <div class="collage-corners">
-          <div class="corner-photo cp-tl"><img src="./images/photo10.jpg" alt="" /></div>
-          <div class="corner-photo cp-tr"><img src="./images/photo12.jpg" alt="" /></div>
-          <div class="corner-photo cp-bl"><img src="./images/photo16.jpg" alt="" /></div>
-          <div class="corner-photo cp-br"><img src="./images/photo17.jpg" alt="" /></div>
-        </div>
-
-        <div class="collage-center">
-          <div class="center-photo">
-            <img src="./images/photo15.jpg" alt="you" />
-          </div>
-        </div>
-
-        <div class="collage-title">
-          <h2>HAPPY <br /><em>BIRTHDAY</em></h2>
-          <p class="script-name">Girl</p>
-        </div>
-
-        <span class="collage-flower" aria-hidden="true">🌸</span>
-      </section>
-
-      <!-- ============================================================
-           SLIDE 6 · VINTAGE COTTAGECORE (dried flowers, bow polaroids)
-           ============================================================ -->
-      <section class="slide slide-vintage" data-slide>
-        <div class="vintage-bg" aria-hidden="true"></div>
-
-        <span class="v-flower vf-tl" aria-hidden="true">🌸</span>
-        <span class="v-flower vf-tr" aria-hidden="true">🌷</span>
-        <span class="v-flower vf-bl" aria-hidden="true">🌼</span>
-        <span class="v-flower vf-br" aria-hidden="true">🌺</span>
-        <span class="v-butterfly vb-1" aria-hidden="true">🦋</span>
-        <span class="v-butterfly vb-2" aria-hidden="true">🦋</span>
-
-        <h2 class="vintage-title">
-          Happy <br /><span class="italic">Birthday</span>
-        </h2>
-
-        <div class="vintage-polaroids">
-          <div class="v-polaroid vp-1">
-            <span class="v-bow">🎀</span>
-            <div class="polaroid-photo"><img src="./images/photo18.jpg" alt="a memory" /></div>
-            <span class="v-heart">♡</span>
-          </div>
-          <div class="v-polaroid vp-2">
-            <span class="v-bow">🎀</span>
-            <div class="polaroid-photo"><img src="./images/photo19.jpg" alt="a memory" /></div>
-            <span class="v-heart">♡</span>
-          </div>
-        </div>
-
-        <div class="vintage-note">
-          <p>Wishing you<br />all the happiness<br />today &amp; always</p>
-          <span class="note-heart">♡</span>
-        </div>
-
-        <!-- Floating photo13 -->
-        <div class="floating-polaroid floating-tl" aria-hidden="true">
-          <div class="polaroid-inner"><img src="./images/photo13.jpg" alt="" /></div>
-          <span class="polaroid-tape"></span>
-          <span class="polaroid-caption">forever people ♡</span>
-        </div>
-      </section>
-
-      <!-- ============================================================
-           SLIDE 7 · CANDLE
-           ============================================================ -->
-      <section class="slide slide-candle" data-slide>
-        <div class="stickers">
-          <span class="sticker" style="top:18%;left:14%">✨</span>
-          <span class="sticker" style="bottom:22%;right:12%">✨</span>
-          <span class="sticker" style="top:26%;right:20%">🌟</span>
-          <span class="sticker" style="bottom:28%;left:16%">💗</span>
-        </div>
-        <div class="candle-wrap">
-          <p class="candle-title">make a wish, birthday girl</p>
-          <div class="candle" id="candle" role="button" tabindex="0" aria-label="Blow the candle out">
-            <div class="flame"></div>
-            <div class="wick"></div>
-            <div class="stick"></div>
-            <div class="plate"></div>
-          </div>
-          <p class="candle-hint" id="candle-hint">tap the flame ✨</p>
-          <p class="candle-wish" id="candle-wish">
-            wish sent to the universe <span class="heart">♡</span>
+          <p>Hey Gullu!</p>
+          <p>
+            Happy Birthday to one of the most intelligent, caring, hardworking,
+            and genuinely beautiful souls I know.
           </p>
-        </div>
+          <p>
+            You're always doing something for someone, working towards
+            something, or thinking about the people you love. So today, I
+            wanted to create something that is just for you — a little
+            collection of words to remind you that you are appreciated,
+            admired, and valued, not just for what you achieve, but for who
+            you are.
+          </p>
+          <p>
+            This is for your kindness, your dreams, your strength, your
+            beautiful heart, and all the little things that make you Gullu.
+          </p>
+          <p>
+            Keep smiling, keep growing, and never forget how much good you
+            bring into this world.
+          </p>
+          <p class="letter-close">With lots of respect, care, and friendship. ❤️</p>
+          <p class="letter-sig">— a friend who's grateful you exist</p>
+        </article>
+
+        <button class="btn ghost" data-next>continue to the wishes →</button>
       </section>
 
       <!-- ============================================================
-           SLIDE 8 · CHILDHOOD REVEAL (photo01) — locked chest opens
+           03 · WISH 01 · the world better
            ============================================================ -->
-      <section class="slide slide-childhood" data-slide>
-        <div class="stickers">
-          <span class="sticker" style="top:10%;left:8%">✨</span>
-          <span class="sticker" style="top:14%;right:12%">🌟</span>
-          <span class="sticker" style="bottom:16%;left:10%">💗</span>
-          <span class="sticker" style="bottom:12%;right:14%">🌸</span>
-          <span class="sticker" style="top:60%;left:6%">💫</span>
-          <span class="sticker" style="top:70%;right:8%">🌷</span>
+      <section class="slide slide-wish" data-slide data-layout="right">
+        <div class="chapter-marker">
+          <span class="cm-num">01</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">twelve little reminders · 01 / 12</span>
         </div>
-
-        <div class="secret-wrap">
-          <p class="secret-eyebrow">one last little secret ✨</p>
-
-          <div class="chest" id="chest" role="button" tabindex="0" aria-label="tap the chest to open">
-            <div class="chest-lid"></div>
-            <div class="chest-body">
-              <span class="chest-lock">🔒</span>
-              <span class="chest-hint">tap to open</span>
-            </div>
-            <div class="chest-glow"></div>
-            <div class="chest-photo">
-              <div class="photo-frame">
-                <img src="./images/photo01.jpg" alt="a childhood memory" />
-                <span class="frame-halo"></span>
-              </div>
-            </div>
+        <div class="wish-stage">
+          <div class="wish-photo">
+            <div class="photo-frame"><img src="./images/photo02.jpg" alt="Gullu" loading="lazy" /></div>
+            <p class="photo-caption">for the person you are</p>
           </div>
-
-          <div class="secret-caption">
-            <p class="tag">before all of this ✨</p>
-            <p class="quote">"you were already this — soft, brave, luminous. the world just took a little time to catch up."</p>
-            <p class="reflection">
-              look at her. look at that tiny you. she had no idea how loved
-              she would grow up to be. i wish i could show her this page.
+          <div class="wish-content">
+            <span class="wish-eyebrow">wish 01 · the person you are</span>
+            <h3 class="wish-title">Some People Make the World Better</h3>
+            <blockquote class="wish-quote">
+              <span class="qmark">“</span>Some people make the world better just by being in it.<span class="qmark close">”</span>
+            </blockquote>
+            <p class="wish-body">
+              Gullu, you are one of those rare people who don't need to do
+              anything extraordinary to be special. Your kindness, your
+              genuine heart, and the way you make people feel cared for are
+              extraordinary enough. Never underestimate how beautiful a
+              person you are.
             </p>
           </div>
         </div>
       </section>
 
       <!-- ============================================================
-           SLIDE 9 · FINALE
+           04 · WISH 02 · intelligence meets kindness
            ============================================================ -->
-      <section class="slide slide-finale" data-slide>
-        <div class="stickers">
-          <span class="sticker" style="top:10%;left:8%">🌸</span>
-          <span class="sticker" style="top:16%;right:10%">💗</span>
-          <span class="sticker" style="bottom:14%;left:14%">✨</span>
-          <span class="sticker" style="bottom:18%;right:12%">🌟</span>
-          <span class="sticker" style="top:60%;right:6%">🌷</span>
+      <section class="slide slide-wish" data-slide data-layout="left">
+        <div class="chapter-marker">
+          <span class="cm-num">02</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">twelve little reminders · 02 / 12</span>
         </div>
-        <div class="finale-card">
-          <h2>with a heart full of gratitude —</h2>
-          <p>
-            today the world celebrates you, but honestly, i've been quietly
-            celebrating you every day i've had the privilege of calling you my
-            best friend. thank you for being <em>pure</em> in a world that
-            isn't. thank you for the small texts, the loud laughs, the quiet
-            listening, the tiny lectures, the giant heart.
-          </p>
-          <p>
-            you didn't just become my friend — you became a soft place in the
-            noise of the world. may this year hand you sunlight in every corner
-            you walk into. may every wish you're too shy to say out loud find
-            its way to you anyway. may you always be as loved as you are loving.
-          </p>
-          <p>
-            and one more thing — you did the thing. Company Secretary, the way
-            you fought for it, the late nights, the doubts you never let win.
-            i've never told you enough how proud i am of you. <em>CS GURLEEN KAUR.</em>
-            it sounds so grown up. it fits you. you earned every letter of it.
-          </p>
-          <p class="last">
-            happy birthday, Gullu. <br />
-            the world is warmer because you exist in it. 🌷
-          </p>
-          <p class="sig">— your friend, always</p>
-          <button class="cta soft" data-restart>read it again ↺</button>
+        <div class="wish-stage">
+          <div class="wish-photo">
+            <div class="photo-frame"><img src="./images/photo07.jpg" alt="Gullu" loading="lazy" /></div>
+            <p class="photo-caption">for your beautiful mind · CS&nbsp;Gurleen&nbsp;Kaur</p>
+          </div>
+          <div class="wish-content">
+            <span class="wish-eyebrow">wish 02 · your beautiful mind</span>
+            <h3 class="wish-title">Intelligence Meets Kindness</h3>
+            <blockquote class="wish-quote">
+              <span class="qmark">“</span>A beautiful mind is impressive, but a beautiful heart behind it is priceless.<span class="qmark close">”</span>
+            </blockquote>
+            <p class="wish-body">
+              You have the intelligence to build a successful career, the
+              wisdom to handle responsibilities, and the heart to care about
+              people along the way. Being a qualified CS is an achievement
+              you earned through hard work, but the person you are beyond
+              that achievement is equally admirable.
+            </p>
+          </div>
         </div>
       </section>
+
+      <!-- ============================================================
+           05 · WISH 03 · sukoon
+           ============================================================ -->
+      <section class="slide slide-wish wish-highlight" data-slide data-layout="right">
+        <div class="chapter-marker">
+          <span class="cm-num">03</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">twelve little reminders · 03 / 12</span>
+        </div>
+        <div class="wish-stage">
+          <div class="wish-photo">
+            <div class="photo-frame"><img src="./images/photo25.jpg" alt="Gullu" loading="lazy" /></div>
+            <p class="photo-caption">for the peace you bring · my sukoon</p>
+          </div>
+          <div class="wish-content">
+            <span class="wish-eyebrow">wish 03 · my sukoon</span>
+            <h3 class="wish-title">The Peace You Bring</h3>
+            <blockquote class="wish-quote">
+              <span class="qmark">“</span>Some friendships feel like home, even when life feels overwhelming.<span class="qmark close">”</span>
+            </blockquote>
+            <p class="wish-body">
+              Gullu, you have this beautiful way of bringing peace without
+              even trying. In a world that is always rushing, worrying, and
+              demanding something from us, your presence feels like a quiet
+              moment of relief. I hope life gives you the same comfort and
+              peace that your friendship brings to me.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           06 · WISH 04 · courage
+           ============================================================ -->
+      <section class="slide slide-wish" data-slide data-layout="left">
+        <div class="chapter-marker">
+          <span class="cm-num">04</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">twelve little reminders · 04 / 12</span>
+        </div>
+        <div class="wish-stage">
+          <div class="wish-photo">
+            <div class="photo-frame"><img src="./images/photo20.jpg" alt="Gullu" loading="lazy" /></div>
+            <p class="photo-caption">for the courage to keep climbing</p>
+          </div>
+          <div class="wish-content">
+            <span class="wish-eyebrow">wish 04 · your courage</span>
+            <h3 class="wish-title">Keep Believing in Yourself</h3>
+            <blockquote class="wish-quote">
+              <span class="qmark">“</span>May you always be as brave as the dreams you carry.<span class="qmark close">”</span>
+            </blockquote>
+            <p class="wish-body">
+              I hope you never doubt your own strength, especially on the
+              days when everything feels difficult. You've worked hard to
+              become who you are, and you have so much more ahead of you.
+              Keep believing in yourself, Gullu. You are capable of building
+              a life that makes you genuinely proud.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           07 · WISH 05 · family (mother)
+           ============================================================ -->
+      <section class="slide slide-wish wish-highlight" data-slide data-layout="right">
+        <div class="chapter-marker">
+          <span class="cm-num">05</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">twelve little reminders · 05 / 12</span>
+        </div>
+        <div class="wish-stage">
+          <div class="wish-photo">
+            <div class="photo-frame"><img src="./images/photo23.jpg" alt="Gullu with her mother" loading="lazy" /></div>
+            <p class="photo-caption script">For the love that makes a house feel like home.</p>
+          </div>
+          <div class="wish-content">
+            <span class="wish-eyebrow">wish 05 · your love for family</span>
+            <h3 class="wish-title">The Heart of Your Family</h3>
+            <blockquote class="wish-quote">
+              <span class="qmark">“</span>The way you love your family says so much about the beauty of your heart.<span class="qmark close">”</span>
+            </blockquote>
+            <p class="wish-body">
+              There's something special about a person who remembers the
+              little things, worries about their loved ones, and wants
+              everyone at home to be happy. Gullu, I hope you always
+              receive the same love, care, and protection that you so
+              naturally give to your family.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           08 · WISH 06 · caring heart
+           ============================================================ -->
+      <section class="slide slide-wish" data-slide data-layout="left">
+        <div class="chapter-marker">
+          <span class="cm-num">06</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">twelve little reminders · 06 / 12</span>
+        </div>
+        <div class="wish-stage">
+          <div class="wish-photo">
+            <div class="photo-frame"><img src="./images/photo22.jpg" alt="Gullu with her little brother" loading="lazy" /></div>
+            <p class="photo-caption">for the softness you give the people you love</p>
+          </div>
+          <div class="wish-content">
+            <span class="wish-eyebrow">wish 06 · your caring heart</span>
+            <h3 class="wish-title">You Make People Feel Cared For</h3>
+            <blockquote class="wish-quote">
+              <span class="qmark">“</span>Your heart has a way of making the people you love feel less alone.<span class="qmark close">”</span>
+            </blockquote>
+            <p class="wish-body">
+              Whether it's your family, your friends, or someone who simply
+              needs a little understanding, you have this caring side that
+              makes people feel important. Please never lose that softness,
+              even when life gives you reasons to become hard. Your kindness
+              is one of your greatest strengths.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           09 · WISH 07 · effort behind success
+           ============================================================ -->
+      <section class="slide slide-wish" data-slide data-layout="right">
+        <div class="chapter-marker">
+          <span class="cm-num">07</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">twelve little reminders · 07 / 12</span>
+        </div>
+        <div class="wish-stage">
+          <div class="wish-photo">
+            <div class="photo-frame"><img src="./images/photo26.jpg" alt="Gullu" loading="lazy" /></div>
+            <p class="photo-caption">for every quiet effort nobody saw</p>
+          </div>
+          <div class="wish-content">
+            <span class="wish-eyebrow">wish 07 · your hard work</span>
+            <h3 class="wish-title">The Effort Behind Your Success</h3>
+            <blockquote class="wish-quote">
+              <span class="qmark">“</span>Behind every strong woman is a thousand quiet efforts nobody saw.<span class="qmark close">”</span>
+            </blockquote>
+            <p class="wish-body">
+              Your dedication, discipline, and the work you put into your
+              career deserve so much appreciation. People may see the
+              qualified professional you are today, but they don't always
+              see the effort, patience, and determination it took to get
+              here. I hope you always give yourself credit for how far
+              you've come.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           10 · WISH 08 · care for yourself
+           ============================================================ -->
+      <section class="slide slide-wish" data-slide data-layout="left">
+        <div class="chapter-marker">
+          <span class="cm-num">08</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">twelve little reminders · 08 / 12</span>
+        </div>
+        <div class="wish-stage">
+          <div class="wish-photo">
+            <div class="photo-frame"><img src="./images/photo02.jpg" alt="Gullu" loading="lazy" /></div>
+            <p class="photo-caption">treat yourself as softly as you treat others ✦</p>
+          </div>
+          <div class="wish-content">
+            <span class="wish-eyebrow">wish 08 · your kindness, returned</span>
+            <h3 class="wish-title">Remember to Care for Yourself, Too</h3>
+            <blockquote class="wish-quote">
+              <span class="qmark">“</span>Stay kind, but never forget that you deserve kindness too.<span class="qmark close">”</span>
+            </blockquote>
+            <p class="wish-body">
+              You care so much about everyone else that I hope you never
+              forget to take care of yourself. You deserve people who check
+              on you, celebrate your smallest victories, understand your
+              silence, and stand beside you when you are tired of being
+              strong for everyone else.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           11 · WISH 09 · never stop being you
+           ============================================================ -->
+      <section class="slide slide-wish" data-slide data-layout="right">
+        <div class="chapter-marker">
+          <span class="cm-num">09</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">twelve little reminders · 09 / 12</span>
+        </div>
+        <div class="wish-stage">
+          <div class="wish-photo">
+            <div class="photo-frame"><img src="./images/photo24.jpg" alt="Gullu" loading="lazy" /></div>
+            <p class="photo-caption">for every unfiltered, loud-laugh moment of you</p>
+          </div>
+          <div class="wish-content">
+            <span class="wish-eyebrow">wish 09 · your uniqueness</span>
+            <h3 class="wish-title">Never Stop Being You</h3>
+            <blockquote class="wish-quote">
+              <span class="qmark">“</span>Never dim your light just to make the world more comfortable.<span class="qmark close">”</span>
+            </blockquote>
+            <p class="wish-body">
+              Be ambitious. Be intelligent. Be emotional when you need to
+              be. Laugh loudly, dream bigger, and keep becoming the woman
+              you want to be. You don't have to make yourself smaller for
+              anyone. The right people will appreciate your strength and
+              your softness together.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           12 · WISH 10 · the life ahead
+           ============================================================ -->
+      <section class="slide slide-wish" data-slide data-layout="left">
+        <div class="chapter-marker">
+          <span class="cm-num">10</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">twelve little reminders · 10 / 12</span>
+        </div>
+        <div class="wish-stage">
+          <div class="wish-photo">
+            <div class="photo-frame"><img src="./images/photo16.jpg" alt="Gullu with her brother" loading="lazy" /></div>
+            <p class="photo-caption">for everything that's still ahead ✦</p>
+          </div>
+          <div class="wish-content">
+            <span class="wish-eyebrow">wish 10 · your future</span>
+            <h3 class="wish-title">The Beautiful Life Ahead</h3>
+            <blockquote class="wish-quote">
+              <span class="qmark">“</span>May the life you're working so hard for become even more beautiful than you imagined.<span class="qmark close">”</span>
+            </blockquote>
+            <p class="wish-body">
+              I wish you opportunities that match your talent, success that
+              makes every sacrifice worthwhile, and happiness that doesn't
+              depend on achievements alone. May you grow professionally,
+              personally, and emotionally while always having enough time
+              to enjoy the little things that make life beautiful.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           13 · WISH 11 · friendship
+           ============================================================ -->
+      <section class="slide slide-wish" data-slide data-layout="right">
+        <div class="chapter-marker">
+          <span class="cm-num">11</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">twelve little reminders · 11 / 12</span>
+        </div>
+        <div class="wish-stage">
+          <div class="wish-photo">
+            <div class="photo-frame polaroid"><img src="./images/photo01.jpg" alt="A childhood memory" loading="lazy" /></div>
+            <p class="photo-caption script">friends who become a part of us ♡</p>
+          </div>
+          <div class="wish-content">
+            <span class="wish-eyebrow">wish 11 · our friendship</span>
+            <h3 class="wish-title">A Friendship I Am Grateful For</h3>
+            <blockquote class="wish-quote">
+              <span class="qmark">“</span>Some friendships become a quiet, beautiful part of who we are.<span class="qmark close">”</span>
+            </blockquote>
+            <p class="wish-body">
+              Gullu, I'm genuinely grateful that life gave me a friend
+              like you. You don't have to do something big or say
+              something perfect to matter. Sometimes, simply knowing that
+              you exist in my world is enough to make an ordinary day
+              feel a little better. I hope our friendship always keeps
+              its honesty, warmth, and beautiful simplicity.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           14 · WISH 12 · happy birthday
+           ============================================================ -->
+      <section class="slide slide-wish wish-highlight wish-birthday" data-slide data-layout="left">
+        <div class="chapter-marker">
+          <span class="cm-num">12</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">twelve little reminders · 12 / 12</span>
+        </div>
+        <div class="wish-stage">
+          <div class="wish-photo">
+            <div class="photo-frame"><img src="./images/photo21.jpg" alt="Gullu" loading="lazy" /></div>
+            <p class="photo-caption script">happy birthday, Gullu ✦</p>
+          </div>
+          <div class="wish-content">
+            <span class="wish-eyebrow">wish 12 · your birthday</span>
+            <h3 class="wish-title">Happy Birthday, Gullu ❤️</h3>
+            <blockquote class="wish-quote">
+              <span class="qmark">“</span>May life be as gentle with you as your heart is with everyone else.<span class="qmark close">”</span>
+            </blockquote>
+            <p class="wish-body">
+              On your birthday, I wish you more than success, money, or
+              achievements. I wish you peace on difficult days, confidence
+              when you doubt yourself, people who genuinely value you, good
+              health for you and your family, and countless reasons to
+              smile. Keep growing, keep shining, and keep being the
+              wonderful Gullu you are. The world needs more hearts like
+              yours.
+            </p>
+            <p class="wish-closing">
+              Here's to another year of dreams, growth, happiness, and
+              beautiful memories.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           15 · MEMORIES GALLERY
+           ============================================================ -->
+      <section class="slide slide-memories" data-slide>
+        <div class="chapter-marker">
+          <span class="cm-num">13</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">her memories</span>
+        </div>
+
+        <h2 class="section-h">
+          A Few Little Moments,<br/><em>A Lot of Love</em>
+        </h2>
+        <p class="section-sub">
+          Every photograph holds a little piece of a story.
+        </p>
+
+        <div class="scrapbook">
+          <figure class="snap tilt-l">
+            <div class="snap-frame"><img src="./images/photo02.jpg" alt="Gullu" loading="lazy" /></div>
+          </figure>
+          <figure class="snap tilt-r">
+            <div class="snap-frame polaroid">
+              <img src="./images/photo21.jpg" alt="Gullu" loading="lazy" />
+              <figcaption>a night that glowed ✦</figcaption>
+            </div>
+          </figure>
+          <figure class="snap tilt-l">
+            <div class="snap-frame"><img src="./images/photo20.jpg" alt="Gullu" loading="lazy" /></div>
+          </figure>
+          <figure class="snap feature tilt-r">
+            <div class="snap-frame">
+              <img src="./images/photo23.jpg" alt="Gullu with her mother" loading="lazy" />
+              <figcaption>mother &amp; daughter</figcaption>
+            </div>
+          </figure>
+          <figure class="snap tilt-l">
+            <div class="snap-frame"><img src="./images/photo07.jpg" alt="Gullu" loading="lazy" /></div>
+          </figure>
+          <figure class="snap feature tilt-r">
+            <div class="snap-frame">
+              <img src="./images/photo16.jpg" alt="Gullu with her brother" loading="lazy" />
+              <figcaption>her little brother</figcaption>
+            </div>
+          </figure>
+          <figure class="snap tilt-l">
+            <div class="snap-frame"><img src="./images/photo26.jpg" alt="Gullu" loading="lazy" /></div>
+          </figure>
+          <figure class="snap tilt-r">
+            <div class="snap-frame polaroid">
+              <img src="./images/photo22.jpg" alt="Gullu with her brother" loading="lazy" />
+              <figcaption>didi &amp; her boy</figcaption>
+            </div>
+          </figure>
+          <figure class="snap tilt-l">
+            <div class="snap-frame"><img src="./images/photo24.jpg" alt="Gullu" loading="lazy" /></div>
+          </figure>
+          <figure class="snap tilt-r">
+            <div class="snap-frame polaroid">
+              <img src="./images/photo01.jpg" alt="A childhood memory" loading="lazy" />
+              <figcaption>before all of this ♡</figcaption>
+            </div>
+          </figure>
+          <figure class="snap tilt-l">
+            <div class="snap-frame"><img src="./images/photo25.jpg" alt="Gullu" loading="lazy" /></div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           16 · LITTLE WISHES
+           ============================================================ -->
+      <section class="slide slide-little" data-slide>
+        <div class="chapter-marker">
+          <span class="cm-num">14</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">little wishes</span>
+        </div>
+
+        <h2 class="section-h">
+          Little Wishes for<br/><em>Your New Chapter</em>
+        </h2>
+
+        <div class="lw-grid">
+          <article class="lw-card"><span class="lw-num">i.</span><p>A career that makes you proud and a life that makes you happy.</p></article>
+          <article class="lw-card"><span class="lw-num">ii.</span><p>The courage to pursue every dream that matters to you.</p></article>
+          <article class="lw-card"><span class="lw-num">iii.</span><p>Good health, happiness, and endless reasons to smile for you and your family.</p></article>
+          <article class="lw-card"><span class="lw-num">iv.</span><p>People who appreciate your kindness as much as you appreciate theirs.</p></article>
+          <article class="lw-card"><span class="lw-num">v.</span><p>Peace on the difficult days and confidence in your own abilities.</p></article>
+          <article class="lw-card"><span class="lw-num">vi.</span><p>The freedom to enjoy life without always having to be strong for everyone else.</p></article>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           17 · BIRTHDAY PACK · CAKE CUTTING
+           ============================================================ -->
+      <section class="slide slide-cake" data-slide>
+        <div class="chapter-marker">
+          <span class="cm-num">15</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">birthday pack · cake cutting</span>
+        </div>
+        <h2 class="pack-h">Cut the Cake, <em>Gullu</em></h2>
+        <p class="pack-sub">tap the cake to make the first slice ✧</p>
+
+        <div class="cake-stage" id="cake-stage">
+          <div class="cake" id="cake" role="button" tabindex="0" aria-label="Cut the birthday cake">
+            <div class="cake-plate"></div>
+            <div class="cake-base cake-tier tier-base"></div>
+            <div class="cake-mid  cake-tier tier-mid"></div>
+            <div class="cake-top  cake-tier tier-top"></div>
+            <span class="cake-drip drip-1"></span>
+            <span class="cake-drip drip-2"></span>
+            <span class="cake-drip drip-3"></span>
+            <span class="cake-drip drip-4"></span>
+            <span class="cake-drip drip-5"></span>
+            <span class="cake-cherry cherry-l"></span>
+            <span class="cake-cherry cherry-r"></span>
+            <span class="cake-cherry cherry-top"></span>
+            <div class="cake-candle">
+              <span class="cc-flame"></span>
+              <span class="cc-stick"></span>
+            </div>
+            <!-- knife cuts in from the right -->
+            <div class="cake-knife" aria-hidden="true">
+              <span class="knife-blade"></span>
+              <span class="knife-handle"></span>
+            </div>
+            <!-- slice reveal -->
+            <div class="cake-slice" aria-hidden="true"></div>
+          </div>
+          <p class="cake-caption" id="cake-caption">tap to cut ✦</p>
+          <button class="btn ghost continue hidden" id="cake-continue" data-next>continue →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           18 · BIRTHDAY PACK · CANDLES / WISH
+           ============================================================ -->
+      <section class="slide slide-candle-pack" data-slide>
+        <div class="chapter-marker">
+          <span class="cm-num">16</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">birthday pack · make a wish</span>
+        </div>
+        <h2 class="pack-h">Make a Wish, <em>Birthday Girl</em></h2>
+        <p class="pack-sub">tap each flame to blow it out — then send your wish ✧</p>
+
+        <div class="candles-row" id="candles-row">
+          <div class="candle" tabindex="0" role="button" aria-label="Blow out candle">
+            <div class="candle-flame"></div><div class="candle-wick"></div><div class="candle-stick"></div>
+          </div>
+          <div class="candle" tabindex="0" role="button" aria-label="Blow out candle">
+            <div class="candle-flame"></div><div class="candle-wick"></div><div class="candle-stick tall"></div>
+          </div>
+          <div class="candle" tabindex="0" role="button" aria-label="Blow out candle">
+            <div class="candle-flame"></div><div class="candle-wick"></div><div class="candle-stick"></div>
+          </div>
+          <div class="candle" tabindex="0" role="button" aria-label="Blow out candle">
+            <div class="candle-flame"></div><div class="candle-wick"></div><div class="candle-stick tall"></div>
+          </div>
+          <div class="candle" tabindex="0" role="button" aria-label="Blow out candle">
+            <div class="candle-flame"></div><div class="candle-wick"></div><div class="candle-stick"></div>
+          </div>
+        </div>
+
+        <p class="candles-status" id="candles-status">0 / 5 blown out</p>
+        <p class="candle-wish-text" id="candle-wish-text">
+          your wish is on its way ✦
+        </p>
+        <button class="btn ghost continue hidden" id="candle-continue" data-next>continue →</button>
+      </section>
+
+      <!-- ============================================================
+           19 · BIRTHDAY PACK · BALLOONS
+           ============================================================ -->
+      <section class="slide slide-balloons" data-slide>
+        <div class="chapter-marker">
+          <span class="cm-num">17</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">birthday pack · balloons</span>
+        </div>
+        <h2 class="pack-h">Pop the <em>Balloons</em></h2>
+        <p class="pack-sub">tap each balloon — a tiny wish is inside ✧</p>
+
+        <div class="balloons-stage" id="balloons-stage">
+          <div class="balloon" tabindex="0" role="button" style="--c1:#D8A7A7;--c2:#B47070;--x:-180px;--y:30px;--d:0s" data-msg="joy">
+            <span class="b-shine"></span><span class="b-string"></span>
+          </div>
+          <div class="balloon" tabindex="0" role="button" style="--c1:#C6A15B;--c2:#8E6E36;--x:-70px;--y:-20px;--d:0.5s" data-msg="peace">
+            <span class="b-shine"></span><span class="b-string"></span>
+          </div>
+          <div class="balloon" tabindex="0" role="button" style="--c1:#702D3A;--c2:#4A1C27;--x:40px;--y:40px;--d:1s" data-msg="laughter">
+            <span class="b-shine"></span><span class="b-string"></span>
+          </div>
+          <div class="balloon" tabindex="0" role="button" style="--c1:#E7C4C4;--c2:#B88888;--x:150px;--y:-10px;--d:1.5s" data-msg="softness">
+            <span class="b-shine"></span><span class="b-string"></span>
+          </div>
+          <div class="balloon" tabindex="0" role="button" style="--c1:#E4CFA2;--c2:#B18A43;--x:260px;--y:50px;--d:2s" data-msg="courage">
+            <span class="b-shine"></span><span class="b-string"></span>
+          </div>
+        </div>
+
+        <p class="balloons-status" id="balloons-status">pop them all to continue ·  <span id="pop-count">0</span> / 5</p>
+        <button class="btn ghost continue hidden" id="balloons-continue" data-next>continue →</button>
+      </section>
+
+      <!-- ============================================================
+           20 · FINALE
+           ============================================================ -->
+      <section class="slide slide-finale" data-slide>
+        <div class="chapter-marker">
+          <span class="cm-num">18</span>
+          <span class="cm-rule"></span>
+          <span class="cm-title">one last thing</span>
+        </div>
+
+        <div class="finale-stage">
+          <div class="finale-photo" aria-hidden="true">
+            <div class="snap-frame"><img src="./images/photo07.jpg" alt="" loading="lazy" /></div>
+          </div>
+
+          <article class="finale-card">
+            <h2 class="finale-h">One Last Thing,<br/><em>Gullu...</em></h2>
+            <p>Never forget that you are more than your qualifications, your career, your responsibilities, or everything you do for other people.</p>
+            <p>You are a person with your own dreams, your own feelings, your own beautiful qualities, and a future full of possibilities.</p>
+            <p>I'm proud of the person you are, and I genuinely hope life gives you a thousand reasons to be proud of yourself, too.</p>
+            <p>Thank you for being the caring, intelligent, hardworking, and wonderful friend that you are.</p>
+            <p>No matter how busy life gets or how much changes with time, I hope you always remember to take care of yourself as lovingly as you take care of everyone else.</p>
+            <p class="finale-happy">Happy Birthday, Gullu.</p>
+            <p class="finale-list">Stay happy. Stay strong. Stay kind.<br/>And always stay beautifully yourself.</p>
+            <p class="finale-close">With lots of respect, care, and friendship. ❤️</p>
+            <p class="finale-sig">Made especially for Gullu · 26 October</p>
+            <button class="btn primary" data-restart>
+              Replay Your Birthday Wishes
+              <span class="btn-glyph" aria-hidden="true">↺</span>
+            </button>
+          </article>
+        </div>
+      </section>
+
     </main>
 
-    <button class="nav prev" id="prev" aria-label="previous slide">‹</button>
-    <button class="nav next" id="next" aria-label="next slide">›</button>
-    <div class="dots" id="dots" role="tablist" aria-label="slide navigation"></div>
+    <!-- nav controls -->
+    <button class="nav prev" id="nav-prev" aria-label="previous">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 6 L9 12 L15 18"/></svg>
+    </button>
+    <button class="nav next" id="nav-next" aria-label="next">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 6 L15 12 L9 18"/></svg>
+    </button>
+
+    <!-- toast -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script src="./script.js"></script>
   </body>
