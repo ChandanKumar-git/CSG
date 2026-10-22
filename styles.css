@@ -4,23 +4,34 @@
    Slide-deck navigation (click, not scroll) · tasteful decoration.
    ============================================================ */
 :root {
+  /* core palette (from the brief) */
   --cream:        #FAF7F0;
-  --cream-2:      #F3EEDF;
-  --cream-3:      #ECE5D1;
+  --cream-2:      #F3EBD8;
+  --cream-3:      #ECE0C6;
   --burgundy:     #702D3A;
   --burgundy-2:   #5A2330;
+  --burgundy-3:   #8C3A49;
   --burgundy-ink: #3F1823;
   --rose:         #D8A7A7;
   --rose-2:       #E7C4C4;
-  --rose-mist:    #F3E1E1;
+  --rose-mist:    #F3DADA;
   --gold:         #C6A15B;
   --gold-2:       #B18A43;
+  --gold-3:       #D8B775;
   --gold-soft:    #E4CFA2;
   --charcoal:     #292626;
   --charcoal-2:   #4a4442;
   --mute:         #8a7f78;
-  --hairline:     rgba(198, 161, 91, 0.35);
+
+  /* added warmth — brings back the blush from the original scaffold */
+  --blush:        #F8DDD0;
+  --blush-2:      #FBE6DD;
+  --pink-soft:    #F6C8D0;
+  --champagne:    #ECD4A9;
+
+  --hairline:     rgba(198, 161, 91, 0.4);
   --hairline-ink: rgba(41, 38, 38, 0.12);
+  --hairline-rose: rgba(216, 167, 167, 0.5);
   --sh-sm:  0 2px 8px -2px rgba(41,38,38,0.08);
   --sh-md:  0 10px 24px -14px rgba(41,38,38,0.18), 0 2px 8px -3px rgba(41,38,38,0.08);
   --sh-lg:  0 24px 50px -24px rgba(112,45,58,0.22), 0 8px 20px -10px rgba(41,38,38,0.1);
@@ -36,7 +47,7 @@
   --script:  "Caveat", cursive;
 }
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; margin: 0; }
 
 body {
@@ -48,12 +59,15 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow: hidden;
+  overscroll-behavior: none;
   background:
-    radial-gradient(1200px 900px at 10% -10%, var(--cream-2) 0%, transparent 55%),
+    radial-gradient(1200px 900px at 10% -10%, var(--blush-2) 0%, transparent 55%),
     radial-gradient(1000px 800px at 100% 20%, var(--rose-mist) 0%, transparent 55%),
-    radial-gradient(900px 800px at 50% 110%, var(--cream-2) 0%, transparent 60%),
-    var(--cream);
+    radial-gradient(900px 800px at 50% 110%, var(--blush) 0%, transparent 60%),
+    radial-gradient(700px 600px at 90% 90%, rgba(236,212,169,0.4) 0%, transparent 60%),
+    linear-gradient(180deg, var(--cream) 0%, var(--blush-2) 100%);
   background-attachment: fixed;
+  touch-action: pan-y;
 }
 
 body::before {
@@ -117,14 +131,14 @@ body::before {
   display: block;
   height: 100%;
   width: 5%;
-  background: linear-gradient(90deg, var(--gold) 0%, var(--burgundy) 55%, var(--rose) 100%);
-  box-shadow: 0 0 8px rgba(198,161,91,0.4);
+  background: linear-gradient(90deg, var(--gold) 0%, var(--burgundy) 40%, var(--rose) 70%, var(--gold-3) 100%);
+  box-shadow: 0 0 10px rgba(198,161,91,0.6), 0 0 4px rgba(112,45,58,0.4);
   transition: width 0.6s cubic-bezier(0.22,1,0.36,1);
 }
 .slide-counter {
   position: fixed;
-  top: 18px;
-  right: 24px;
+  top: 14px;
+  right: 20px;
   z-index: 40;
   font-family: var(--display);
   font-weight: 500;
@@ -133,9 +147,22 @@ body::before {
   display: flex;
   align-items: baseline;
   gap: 6px;
-  opacity: 0.9;
+  padding: 6px 14px;
+  background: rgba(250, 247, 240, 0.75);
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: var(--sh-sm);
 }
-.slide-counter #slide-current { font-size: 20px; font-weight: 600; }
+.slide-counter #slide-current {
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 .slide-counter .sc-slash { color: var(--gold); font-size: 14px; }
 .slide-counter #slide-total { font-size: 14px; color: var(--mute); }
 
@@ -146,6 +173,7 @@ body::before {
   position: relative;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   z-index: 5;
 }
@@ -160,20 +188,23 @@ body::before {
   padding: clamp(60px, 7vw, 100px) clamp(20px, 5vw, 72px);
   opacity: 0;
   visibility: hidden;
-  transform: translateX(30px);
-  transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1), visibility 0s linear 0.6s;
+  transform: translate3d(30px, 0, 0);
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.22,1,0.36,1), visibility 0s linear 0.5s;
   overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  will-change: transform, opacity;
 }
 .slide.active {
   opacity: 1;
   visibility: visible;
-  transform: translateX(0);
-  transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1), visibility 0s linear 0s;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.22,1,0.36,1), visibility 0s linear 0s;
   z-index: 2;
 }
 .slide.prev {
-  transform: translateX(-30px);
+  transform: translate3d(-30px, 0, 0);
 }
 
 /* ---------- chapter marker ---------- */
@@ -215,9 +246,19 @@ body::before {
   font-weight: 600;
   font-size: clamp(28px, 4.5vw, 44px);
   line-height: 1.15;
-  color: var(--burgundy);
+  background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-3) 60%, var(--gold-2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
-.section-h em { font-style: italic; font-weight: 500; color: var(--burgundy-2); }
+.section-h em {
+  font-style: italic;
+  font-weight: 500;
+  background: linear-gradient(135deg, var(--burgundy-2) 0%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 .section-sub {
   text-align: center;
   max-width: 540px;
@@ -248,17 +289,25 @@ body::before {
   transition: all 0.3s ease;
 }
 .btn.primary {
-  background: var(--burgundy);
+  background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-2) 60%, var(--burgundy-ink) 100%);
   color: var(--cream);
-  box-shadow: 0 14px 30px -14px rgba(112,45,58,0.6);
+  border-color: var(--gold);
+  box-shadow:
+    0 0 0 1px rgba(228,207,162,0.5) inset,
+    0 14px 30px -12px rgba(112,45,58,0.65),
+    0 4px 10px -2px rgba(198,161,91,0.4);
 }
 .btn.primary:hover,
 .btn.primary:focus-visible {
-  background: var(--burgundy-2);
+  background: linear-gradient(135deg, var(--burgundy-2) 0%, var(--burgundy-ink) 100%);
   transform: translateY(-2px);
-  box-shadow: 0 18px 36px -14px rgba(112,45,58,0.7);
+  box-shadow:
+    0 0 0 1px rgba(228,207,162,0.65) inset,
+    0 20px 40px -12px rgba(112,45,58,0.75),
+    0 6px 14px -2px rgba(198,161,91,0.55);
   outline: none;
 }
+.btn.primary .btn-glyph { color: var(--gold-3); }
 .btn.ghost {
   background: transparent;
   color: var(--burgundy);
@@ -282,8 +331,10 @@ body::before {
 .slide-welcome {
   text-align: center;
   background:
-    radial-gradient(500px 400px at 50% 10%, rgba(228,207,162,0.4), transparent 70%),
-    radial-gradient(500px 400px at 50% 90%, var(--rose-mist), transparent 70%);
+    radial-gradient(700px 500px at 50% 10%, rgba(236,212,169,0.55), transparent 70%),
+    radial-gradient(600px 500px at 50% 90%, var(--rose-mist), transparent 70%),
+    radial-gradient(400px 400px at 15% 50%, var(--blush), transparent 70%),
+    radial-gradient(400px 400px at 85% 50%, var(--blush-2), transparent 70%);
 }
 .welcome-ornament { color: var(--gold); opacity: 0.75; margin: 0 auto; }
 .welcome-ornament.top { width: 120px; height: 20px; margin-bottom: 20px; }
@@ -687,13 +738,22 @@ body::before {
 
 .wish-highlight {
   background:
-    radial-gradient(500px 400px at 30% 20%, var(--rose-mist), transparent 70%),
-    radial-gradient(500px 400px at 70% 80%, rgba(228,207,162,0.3), transparent 70%);
+    radial-gradient(600px 500px at 30% 20%, var(--rose-mist), transparent 70%),
+    radial-gradient(600px 500px at 70% 80%, rgba(236,212,169,0.5), transparent 70%),
+    radial-gradient(400px 400px at 50% 100%, var(--blush), transparent 70%);
 }
 .wish-birthday {
   background:
-    radial-gradient(500px 400px at 20% 30%, rgba(228,207,162,0.5), transparent 70%),
-    radial-gradient(500px 400px at 80% 70%, var(--rose-mist), transparent 70%);
+    radial-gradient(700px 500px at 20% 30%, rgba(236,212,169,0.7), transparent 70%),
+    radial-gradient(600px 500px at 80% 70%, var(--pink-soft), transparent 70%),
+    radial-gradient(400px 400px at 50% 100%, var(--blush), transparent 70%);
+}
+
+/* give every wish slide a soft tinted background for warmth */
+.slide-wish {
+  background:
+    radial-gradient(500px 400px at 15% 85%, rgba(216,167,167,0.22), transparent 70%),
+    radial-gradient(500px 400px at 85% 15%, rgba(228,207,162,0.22), transparent 70%);
 }
 
 /* floating stickers on each wish slide */
@@ -805,11 +865,11 @@ body::before {
 }
 .lw-card {
   position: relative;
-  padding: 24px 22px 22px;
-  background: #FDFAF2;
-  border: 1px solid var(--hairline-ink);
-  border-radius: 6px;
-  box-shadow: var(--sh-sm);
+  padding: 26px 22px 22px;
+  background: linear-gradient(165deg, #FEFBF4 0%, var(--blush-2) 100%);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  box-shadow: var(--sh-md);
   transition: all 0.3s ease;
   min-height: 160px;
   display: flex;
@@ -817,9 +877,9 @@ body::before {
   gap: 10px;
 }
 .lw-card:hover {
-  box-shadow: var(--sh-md);
-  border-color: var(--hairline);
-  transform: translateY(-2px);
+  box-shadow: var(--sh-lg);
+  border-color: var(--rose);
+  transform: translateY(-3px);
 }
 .lw-card::before {
   content: "";
@@ -856,14 +916,20 @@ body::before {
   font-weight: 600;
   font-style: italic;
   font-size: clamp(28px, 4.5vw, 44px);
-  color: var(--burgundy);
   text-align: center;
+  background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-3) 55%, var(--gold-2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 .pack-h em {
   font-family: var(--script);
   font-style: normal;
-  color: var(--burgundy);
   font-size: 1.3em;
+  background: linear-gradient(180deg, var(--burgundy) 0%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 .pack-sub {
   margin: 0 0 30px;
@@ -1380,49 +1446,195 @@ body::before {
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+/* ---------- sound toggle (top-left) ---------- */
+.sound-toggle {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 40;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: rgba(250, 247, 240, 0.75);
+  border: 1px solid var(--hairline);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: var(--sh-sm);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.sound-toggle:hover { background: var(--blush-2); transform: scale(1.05); }
+.sound-toggle[aria-pressed="false"] { opacity: 0.6; }
+@media (max-width: 640px) {
+  .sound-toggle { top: 10px; left: 10px; width: 32px; height: 32px; font-size: 14px; }
+}
+
+/* chapter marker has to shift right if sound toggle sits in the corner */
+.chapter-marker { left: 64px; }
+@media (max-width: 640px) {
+  .chapter-marker { left: 50px; }
+}
+
 /* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width: 900px) {
-  .scrapbook { grid-template-columns: repeat(3, 1fr); }
+  .scrapbook { grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .lw-grid { grid-template-columns: repeat(2, 1fr); }
-  .finale-stage { grid-template-columns: 1fr; }
-  .finale-photo { max-width: 280px; margin: 0 auto; }
-  .cake { transform: scale(0.9); }
+  .finale-stage { grid-template-columns: 1fr; gap: 24px; }
+  .finale-photo { max-width: 240px; margin: 0 auto; }
 }
 
 @media (max-width: 640px) {
-  .slide { padding: 72px 20px 70px; }
-  .chapter-marker { top: 12px; left: 16px; font-size: 10px; }
-  .chapter-marker .cm-num { font-size: 18px; }
-  .chapter-marker .cm-rule { width: 28px; }
-  .slide-counter { top: 12px; right: 14px; }
-  .slide-counter #slide-current { font-size: 16px; }
+  /* snappier transition on mobile */
+  .slide {
+    padding: 58px 16px 58px;
+    transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1), visibility 0s linear 0.4s;
+  }
+  .slide.active { transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1), visibility 0s linear 0s; }
+
+  .chapter-marker { top: 10px; left: 14px; font-size: 9px; letter-spacing: 0.15em; gap: 8px; max-width: calc(100vw - 100px); }
+  .chapter-marker .cm-num { font-size: 16px; }
+  .chapter-marker .cm-rule { width: 20px; }
+  .chapter-marker .cm-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .slide-counter { top: 10px; right: 12px; }
+  .slide-counter #slide-current { font-size: 15px; }
+  .slide-counter #slide-total,
+  .slide-counter .sc-slash { font-size: 11px; }
 
   .floaters { display: none; }
   .w-balloon { width: 36px; height: 48px; }
   .w-balloon.b2, .w-balloon.b4 { display: none; }
+  .w-leaf { width: 42px; height: 42px; }
 
+  /* welcome */
+  .script-name { font-size: clamp(72px, 22vw, 110px); }
+  .welcome-title { font-size: clamp(22px, 5.5vw, 32px); }
+  .welcome-lead { font-size: 15px; margin: 18px auto 22px; }
+  .welcome-date { font-size: 10px; letter-spacing: 0.25em; }
+
+  /* letter */
+  .letter-paper { padding: 26px 20px; }
+  .letter-h { font-size: 24px; margin: 0 0 14px; }
+  .letter-paper p { font-size: 15px; margin: 0 0 12px; }
+  .slide-letter::before,
+  .slide-letter::after { width: 36px; height: 36px; opacity: 0.4; }
+
+  /* wish slides */
   .wish-stage {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 18px;
     max-width: 400px;
   }
+  .slide-wish { padding: 56px 16px 56px; }
   .slide-wish[data-layout="left"] .wish-stage { direction: ltr; }
-  .wish-photo { max-width: 280px; }
-  .wish-title { font-size: clamp(22px, 6vw, 28px); }
+  .wish-photo { max-width: 240px; }
+  .photo-frame { padding: 8px 8px; transform: rotate(-1deg); }
+  .slide-wish[data-layout="left"] .photo-frame { transform: rotate(1deg); }
+  .photo-frame.polaroid { padding: 10px 10px 32px; }
+  .wish-photo::before,
+  .wish-photo::after { width: 50px; height: 14px; }
+  .photo-caption { font-size: 12px; margin: 10px 0 0; }
+  .photo-caption.script { font-size: 17px; }
+  .wish-title { font-size: 22px; line-height: 1.25; }
+  .wish-quote { font-size: 16px; padding: 8px 0; }
+  .wish-body { font-size: 14px; line-height: 1.65; }
+  .wish-eyebrow { font-size: 10px; letter-spacing: 0.2em; }
+  .wish-closing { font-size: 15px; }
+  .slide-wish::before,
+  .slide-wish::after { width: 26px; height: 26px; opacity: 0.3; }
 
-  .scrapbook { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-  .lw-grid { grid-template-columns: 1fr; }
-  .finale-card { padding: 26px 20px; }
+  /* highlights */
+  .section-h { font-size: clamp(24px, 6vw, 32px); }
+  .section-sub { font-size: 14px; margin-bottom: 18px; }
+  .pack-h { font-size: clamp(24px, 6.5vw, 34px); }
+  .pack-sub { font-size: 13px; margin-bottom: 22px; }
 
-  .nav { width: 40px; height: 40px; }
-  .nav.prev { left: 10px; }
-  .nav.next { right: 10px; }
+  /* memories */
+  .scrapbook { grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 420px; }
+  .snap-frame { padding: 6px 6px; }
+  .snap-frame.polaroid { padding: 8px 8px 28px; }
+  .snap-frame.polaroid figcaption { font-size: 14px; bottom: 6px; }
 
-  .cake { transform: scale(0.72); margin: -20px 0; }
-  .candles-row { gap: 14px; transform: scale(0.85); }
-  .balloons-stage { height: 280px; transform: scale(0.85); }
+  /* little wishes */
+  .lw-grid { grid-template-columns: 1fr; gap: 14px; max-width: 360px; }
+  .lw-card { padding: 20px 18px 18px; min-height: 0; }
+  .lw-card p { font-size: 15px; }
+
+  /* finale */
+  .finale-card { padding: 24px 18px; }
+  .finale-h { font-size: 24px; margin: 0 0 14px; }
+  .finale-card p { font-size: 15px; margin: 0 0 12px; }
+  .finale-happy { font-size: 20px !important; }
+  .finale-list { font-size: 15px !important; }
+  .finale-sig { font-size: 17px !important; }
+
+  /* nav — larger tap targets */
+  .nav { width: 44px; height: 44px; bottom: 20px; top: auto; transform: none; }
+  .nav.prev { left: 16px; }
+  .nav.next { right: 16px; }
+
+  /* birthday pack — proper responsive sizing instead of transform:scale */
+  .cake { width: 240px; height: 260px; }
+  .cake-plate { width: 240px; height: 16px; }
+  .tier-base { width: 180px; height: 68px; bottom: 24px; }
+  .tier-mid  { width: 140px; height: 54px; bottom: 90px; }
+  .tier-top  { width: 100px; height: 46px; bottom: 142px; }
+  .cake-candle { bottom: 196px; }
+  .cherry-l   { bottom: 180px; left: calc(50% - 32px); }
+  .cherry-r   { bottom: 180px; right: calc(50% - 32px); }
+  .cherry-top { bottom: 196px; }
+  .drip-1, .drip-2, .drip-3 { bottom: 78px; }
+  .drip-4, .drip-5 { bottom: 140px; }
+  .cake-knife { right: -30px; width: 50px; height: 180px; }
+  .knife-blade { width: 24px; height: 130px; }
+  .knife-handle { top: 130px; height: 48px; }
+  .cake-slice { bottom: 24px; left: calc(50% + 48px); width: 40px; height: 148px; }
+
+  .candles-row { gap: 12px; min-height: 200px; }
+  .candle { width: 28px; height: 150px; }
+  .candle-stick { width: 20px; height: 110px; }
+  .candle-stick.tall { height: 134px; }
+  .candle-wick { bottom: 110px; height: 8px; }
+  .candle:nth-child(2) .candle-wick,
+  .candle:nth-child(4) .candle-wick { bottom: 134px; }
+  .candle-flame { bottom: 118px; width: 14px; height: 22px; }
+  .candle:nth-child(2) .candle-flame,
+  .candle:nth-child(4) .candle-flame { bottom: 142px; }
+
+  .balloons-stage { height: 260px; max-width: 340px; }
+  .balloon { width: 56px; height: 72px; margin-left: -28px; margin-top: -36px; }
+  .balloon::before { width: 56px; height: 68px; }
+  .balloon::after  { top: 67px; }
+  .balloon .b-string { top: 76px; height: 60px; }
+  .balloon .b-shine  { top: 10px; left: 12px; width: 12px; height: 16px; }
+  /* re-space the balloons for the narrower stage */
+  .balloons-stage .balloon:nth-child(1) { --x: -120px; }
+  .balloons-stage .balloon:nth-child(2) { --x: -60px; }
+  .balloons-stage .balloon:nth-child(3) { --x: 0; }
+  .balloons-stage .balloon:nth-child(4) { --x: 60px; }
+  .balloons-stage .balloon:nth-child(5) { --x: 120px; }
+
+  /* buttons — bigger tap area */
+  .btn { padding: 13px 24px; font-size: 13px; }
+}
+
+/* very narrow (iPhone SE etc.) */
+@media (max-width: 380px) {
+  .wish-photo { max-width: 200px; }
+  .wish-title { font-size: 20px; }
+  .wish-body { font-size: 13.5px; }
+  .script-name { font-size: 68px; }
+  .cake { width: 210px; height: 240px; transform: translateX(-10px); }
+  .balloons-stage { max-width: 300px; }
+  .balloons-stage .balloon:nth-child(1) { --x: -100px; }
+  .balloons-stage .balloon:nth-child(5) { --x: 100px; }
 }
 
 /* ============================================================

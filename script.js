@@ -1,10 +1,162 @@
 /* ============================================================
    For Gullu · 26 October
-   Click-nav slide deck + birthday pack interactions.
+   Click-nav slide deck + birthday pack interactions + sound.
    Vanilla JS, no dependencies.
    ============================================================ */
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* -------------------------------------------------------
+   0) SOUND — tiny engine using Web Audio + SpeechSynthesis.
+      Globally mutable with a floating speaker button.
+   ------------------------------------------------------- */
+const Sound = (() => {
+  let muted = (localStorage.getItem("csg-muted") === "1");
+  let ctx = null;
+  const ensure = () => {
+    if (!ctx) {
+      try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch { ctx = null; }
+    }
+    if (ctx && ctx.state === "suspended") ctx.resume().catch(() => {});
+    return ctx;
+  };
+
+  const chime = (notes, { gain = 0.18, type = "sine" } = {}) => {
+    if (muted) return;
+    const ac = ensure(); if (!ac) return;
+    const now = ac.currentTime;
+    notes.forEach(({ freq, start, dur, g = gain }) => {
+      const osc = ac.createOscillator();
+      const amp = ac.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now + start);
+      amp.gain.setValueAtTime(0, now + start);
+      amp.gain.linearRampToValueAtTime(g, now + start + 0.02);
+      amp.gain.exponentialRampToValueAtTime(0.0001, now + start + dur);
+      osc.connect(amp).connect(ac.destination);
+      osc.start(now + start);
+      osc.stop(now + start + dur + 0.02);
+    });
+  };
+
+  // short noise burst, used for the balloon pop
+  const pop = () => {
+    if (muted) return;
+    const ac = ensure(); if (!ac) return;
+    const now = ac.currentTime;
+    const buf = ac.createBuffer(1, 2048, ac.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+    const src = ac.createBufferSource();
+    src.buffer = buf;
+    const amp = ac.createGain();
+    amp.gain.setValueAtTime(0.25, now);
+    amp.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
+    src.connect(amp).connect(ac.destination);
+    src.start(now);
+  };
+
+  // play a recorded audio file (user's own voice) if present, else fall back to TTS
+  const audioCache = new Map();
+  const playFile = (src) =>
+    new Promise((resolve, reject) => {
+      let a = audioCache.get(src);
+      if (!a) { a = new Audio(src); a.preload = "auto"; audioCache.set(src, a); }
+      a.currentTime = 0;
+      a.volume = 0.95;
+      const done = () => { a.removeEventListener("ended", done); a.removeEventListener("error", err); resolve(); };
+      const err  = (e) => { a.removeEventListener("ended", done); a.removeEventListener("error", err); reject(e); };
+      a.addEventListener("ended", done, { once: true });
+      a.addEventListener("error", err, { once: true });
+      a.play().catch(err);
+    });
+
+  // speak a line — prefers a recorded clip if `voiceFile` is supplied and exists.
+  const say = (text, { pitch = 1.05, rate = 0.95, voiceFile } = {}) => {
+    if (muted) return;
+    const fallback = () => {
+      if (!("speechSynthesis" in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.pitch = pitch; u.rate = rate; u.volume = 1;
+        const voices = window.speechSynthesis.getVoices();
+        const en = voices.find(v => /en[-_]?(US|GB|IN)/i.test(v.lang)) || voices.find(v => /^en/i.test(v.lang));
+        if (en) u.voice = en;
+        window.speechSynthesis.speak(u);
+      } catch {}
+    };
+    if (voiceFile) {
+      playFile(voiceFile).catch(() => fallback());
+    } else {
+      fallback();
+    }
+  };
+
+  // happy-birthday-ish mini melody (3 ascending notes)
+  const birthdayJingle = () => {
+    chime([
+      { freq: 523.25, start: 0.00, dur: 0.22, g: 0.18 }, // C5
+      { freq: 587.33, start: 0.20, dur: 0.22, g: 0.16 }, // D5
+      { freq: 659.25, start: 0.40, dur: 0.26, g: 0.18 }, // E5
+      { freq: 783.99, start: 0.68, dur: 0.42, g: 0.20 }, // G5
+    ], { type: "triangle" });
+  };
+
+  // a soft wish-sent chime
+  const twinkle = () => {
+    chime([
+      { freq: 1046.50, start: 0.00, dur: 0.22, g: 0.14 }, // C6
+      { freq: 1318.51, start: 0.14, dur: 0.26, g: 0.14 }, // E6
+      { freq: 1567.98, start: 0.30, dur: 0.36, g: 0.16 }, // G6
+    ], { type: "sine" });
+  };
+
+  // single soft blow-out puff for each candle
+  const puff = () => {
+    chime([{ freq: 220, start: 0, dur: 0.14, g: 0.14 }], { type: "sawtooth" });
+  };
+
+  const setMuted = (v) => {
+    muted = !!v;
+    localStorage.setItem("csg-muted", muted ? "1" : "0");
+    if (muted && "speechSynthesis" in window) try { window.speechSynthesis.cancel(); } catch {}
+    const btn = document.getElementById("sound-toggle");
+    if (btn) {
+      btn.setAttribute("aria-pressed", String(!muted));
+      btn.textContent = muted ? "🔇" : "🔊";
+      btn.title = muted ? "sound off — tap to enable" : "sound on — tap to mute";
+    }
+  };
+
+  // Floating speaker button in the top-left
+  const mountToggle = () => {
+    const btn = document.createElement("button");
+    btn.id = "sound-toggle";
+    btn.className = "sound-toggle";
+    btn.type = "button";
+    btn.textContent = muted ? "🔇" : "🔊";
+    btn.setAttribute("aria-label", "toggle sound");
+    btn.setAttribute("aria-pressed", String(!muted));
+    btn.title = muted ? "sound off — tap to enable" : "sound on — tap to mute";
+    btn.addEventListener("click", () => setMuted(!muted));
+    document.body.appendChild(btn);
+  };
+  mountToggle();
+
+  // iOS / modern browsers need a user gesture to unlock audio.
+  // The first click or touch anywhere unlocks it.
+  const unlock = () => { ensure(); window.removeEventListener("click", unlock); window.removeEventListener("touchstart", unlock); };
+  window.addEventListener("click", unlock, { once: true, passive: true });
+  window.addEventListener("touchstart", unlock, { once: true, passive: true });
+
+  // Preload voice list (some browsers populate it async)
+  if ("speechSynthesis" in window) {
+    try { window.speechSynthesis.getVoices(); window.speechSynthesis.onvoiceschanged = () => {}; } catch {}
+  }
+
+  return { say, birthdayJingle, twinkle, puff, pop, setMuted, get muted() { return muted; } };
+})();
 
 /* -------------------------------------------------------
    1) SLIDE DECK
@@ -133,6 +285,9 @@ window.addEventListener("touchend", (e) => {
     caption.textContent = "a slice for the birthday girl ✦";
     setTimeout(() => continueBtn.classList.remove("hidden"), 1200);
     confettiBurst(cake, 22, ["#C6A15B", "#D8A7A7", "#702D3A", "#E4CFA2"]);
+    // sound: jingle, then voice
+    Sound.birthdayJingle();
+    setTimeout(() => Sound.say("Happy Birthday, Gullu!", { pitch: 1.15, rate: 0.95, voiceFile: "./audio/happy-birthday.mp3" }), 900);
   };
   cake.addEventListener("click", cut);
   cake.addEventListener("keydown", (e) => {
@@ -168,6 +323,9 @@ window.addEventListener("touchend", (e) => {
     if (out === candles.length) {
       wishEl.classList.add("show");
       setTimeout(() => continueBtn.classList.remove("hidden"), 500);
+      // all out — twinkle + voice "make a wish"
+      Sound.twinkle();
+      setTimeout(() => Sound.say("Make a wish, Gullu!", { pitch: 1.1, rate: 0.95, voiceFile: "./audio/make-a-wish.mp3" }), 600);
     }
   };
 
@@ -177,6 +335,7 @@ window.addEventListener("touchend", (e) => {
       c.classList.add("out");
       update();
       sparkleBurst(c, 8, ["#ffcf72", "#fff6c4", "#C6A15B"]);
+      Sound.puff();
     };
     c.addEventListener("click", blow);
     c.addEventListener("keydown", (e) => {
@@ -211,6 +370,7 @@ window.addEventListener("touchend", (e) => {
     countEl.textContent = popped;
     if (popped === balloons.length) {
       setTimeout(() => continueBtn.classList.remove("hidden"), 500);
+      setTimeout(() => Sound.twinkle(), 300);
     }
   };
 
@@ -223,6 +383,7 @@ window.addEventListener("touchend", (e) => {
       const rect = b.getBoundingClientRect();
       floatingWord(msg, rect.left + rect.width / 2, rect.top + rect.height / 2);
       confettiBurst(b, 14, ["#D8A7A7", "#C6A15B", "#702D3A"]);
+      Sound.pop();
       update();
     };
     b.addEventListener("click", pop);
@@ -341,6 +502,28 @@ function floatingWord(text, x, y) {
 document.querySelectorAll(".slide-welcome .btn, .slide-finale .btn").forEach((btn) => {
   btn.addEventListener("click", () => confettiBurst(btn, 18, ["#C6A15B", "#D8A7A7", "#702D3A", "#E4CFA2"]));
 });
+
+/* -------------------------------------------------------
+   7b) Play a closing voice line on the finale slide
+   ------------------------------------------------------- */
+(() => {
+  const finaleIdx = slides.findIndex(s => s.classList.contains("slide-finale"));
+  if (finaleIdx === -1) return;
+  let playedOnce = false;
+  window.addEventListener("slide-changed", (e) => {
+    if (e.detail.index === finaleIdx && !playedOnce) {
+      playedOnce = true;
+      // tiny delay so the slide settles first
+      setTimeout(() => {
+        Sound.twinkle();
+        setTimeout(() => Sound.say(
+          "With lots of respect, care, and friendship. Happy birthday, Gullu.",
+          { pitch: 1.0, rate: 0.9, voiceFile: "./audio/love-you.mp3" }
+        ), 500);
+      }, 600);
+    }
+  });
+})();
 
 /* -------------------------------------------------------
    8) Asset safety — gentle deterrents
