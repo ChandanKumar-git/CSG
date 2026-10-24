@@ -87,7 +87,7 @@ const Sound = (() => {
       } catch {}
     };
     if (voiceFile) {
-      playFile(voiceFile).catch(() => fallback());
+      playFile(voiceFile).catch(() => {});
     } else {
       fallback();
     }
@@ -117,10 +117,27 @@ const Sound = (() => {
     chime([{ freq: 220, start: 0, dur: 0.14, g: 0.14 }], { type: "sawtooth" });
   };
 
+  // background music — loops softly, starts on first gesture
+  const bg = new Audio("./audio/bg-music.mp3");
+  bg.loop = true;
+  bg.volume = 0.12;
+  bg.preload = "auto";
+  let bgStarted = false;
+  const startBg = () => {
+    if (bgStarted || muted) return;
+    bgStarted = true;
+    bg.play().catch(() => {});
+  };
+
   const setMuted = (v) => {
     muted = !!v;
     localStorage.setItem("csg-muted", muted ? "1" : "0");
-    if (muted && "speechSynthesis" in window) try { window.speechSynthesis.cancel(); } catch {}
+    if (muted) {
+      if ("speechSynthesis" in window) try { window.speechSynthesis.cancel(); } catch {}
+      bg.pause();
+    } else {
+      if (bgStarted) bg.play().catch(() => {});
+    }
     const btn = document.getElementById("sound-toggle");
     if (btn) {
       btn.setAttribute("aria-pressed", String(!muted));
@@ -145,8 +162,13 @@ const Sound = (() => {
   mountToggle();
 
   // iOS / modern browsers need a user gesture to unlock audio.
-  // The first click or touch anywhere unlocks it.
-  const unlock = () => { ensure(); window.removeEventListener("click", unlock); window.removeEventListener("touchstart", unlock); };
+  // The first click or touch anywhere unlocks it and starts bg music.
+  const unlock = () => {
+    ensure();
+    startBg();
+    window.removeEventListener("click", unlock);
+    window.removeEventListener("touchstart", unlock);
+  };
   window.addEventListener("click", unlock, { once: true, passive: true });
   window.addEventListener("touchstart", unlock, { once: true, passive: true });
 
@@ -323,9 +345,8 @@ window.addEventListener("touchend", (e) => {
     if (out === candles.length) {
       wishEl.classList.add("show");
       setTimeout(() => continueBtn.classList.remove("hidden"), 500);
-      // all out — twinkle + voice "make a wish"
+      // all out — twinkle only
       Sound.twinkle();
-      setTimeout(() => Sound.say("Make a wish, Gullu!", { pitch: 1.1, rate: 0.95, voiceFile: "./audio/make-a-wish.mp3" }), 600);
     }
   };
 
@@ -504,7 +525,7 @@ document.querySelectorAll(".slide-welcome .btn, .slide-finale .btn").forEach((bt
 });
 
 /* -------------------------------------------------------
-   7b) Play a closing voice line on the finale slide
+   7b) Play closing twinkle on the finale slide (no voice)
    ------------------------------------------------------- */
 (() => {
   const finaleIdx = slides.findIndex(s => s.classList.contains("slide-finale"));
@@ -513,14 +534,7 @@ document.querySelectorAll(".slide-welcome .btn, .slide-finale .btn").forEach((bt
   window.addEventListener("slide-changed", (e) => {
     if (e.detail.index === finaleIdx && !playedOnce) {
       playedOnce = true;
-      // tiny delay so the slide settles first
-      setTimeout(() => {
-        Sound.twinkle();
-        setTimeout(() => Sound.say(
-          "With lots of respect, care, and friendship. Happy birthday, Gullu.",
-          { pitch: 1.0, rate: 0.9, voiceFile: "./audio/love-you.mp3" }
-        ), 500);
-      }, 600);
+      setTimeout(() => Sound.twinkle(), 600);
     }
   });
 })();

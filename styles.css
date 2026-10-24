@@ -1638,6 +1638,206 @@ body::before {
 }
 
 /* ============================================================
+   PHOTO ALBUM SLIDE
+   ============================================================ */
+.slide-photoalbum {
+  background: #180B0F;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  justify-content: space-between;
+}
+
+/* header crown */
+.pa-header {
+  text-align: center;
+  padding: clamp(48px, 7vw, 80px) 24px 8px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.pa-ornament {
+  color: var(--gold);
+  width: clamp(140px, 30vw, 220px);
+  margin: 0 auto 6px;
+  opacity: 0.65;
+}
+
+.pa-eyebrow {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(11px, 2.2vw, 13px);
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  margin: 0 0 4px;
+  text-transform: lowercase;
+  opacity: 0.9;
+}
+
+.pa-crown-title {
+  font-family: var(--display);
+  font-size: clamp(22px, 5vw, 44px);
+  font-weight: 600;
+  color: var(--cream);
+  margin: 0;
+  line-height: 1;
+  opacity: 0.92;
+}
+
+.pa-crown-name {
+  font-family: var(--script);
+  font-size: clamp(52px, 11vw, 92px);
+  color: var(--rose-2);
+  line-height: 1;
+  margin: -4px 0 2px;
+}
+
+.pa-crown-date {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  margin: 0;
+  opacity: 0.7;
+}
+.pa-crown-date .dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* ---- film strips ---- */
+.pa-strips {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(10px, 1.5vw, 16px);
+  overflow: hidden;
+  padding: clamp(8px, 1.5vw, 16px) 0;
+}
+
+.pa-strip {
+  width: 100%;
+  overflow: hidden;
+}
+
+.pa-strip-inner {
+  display: flex;
+  gap: clamp(8px, 1.5vw, 14px);
+  width: max-content;
+  padding: 4px 0 8px;
+}
+
+.strip-fwd .pa-strip-inner {
+  animation: pa-scroll-fwd 30s linear infinite;
+}
+.strip-rev .pa-strip-inner {
+  animation: pa-scroll-rev 36s linear infinite;
+}
+
+@keyframes pa-scroll-fwd {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes pa-scroll-rev {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+/* individual polaroid card */
+.pa-card {
+  flex-shrink: 0;
+  width: clamp(100px, 14vw, 148px);
+  background: #fff;
+  box-shadow:
+    0 6px 20px rgba(0,0,0,.55),
+    0 2px 6px rgba(0,0,0,.35);
+  padding: 5px 5px 26px;
+  border-radius: 1px;
+  transform: rotate(var(--r, -1.5deg));
+  cursor: default;
+}
+.pa-card:nth-child(2n)   { --r: 1.3deg; }
+.pa-card:nth-child(3n)   { --r: -2.2deg; }
+.pa-card:nth-child(4n)   { --r: 1.8deg; }
+.pa-card:nth-child(5n)   { --r: -0.7deg; }
+.pa-card:nth-child(6n)   { --r: 2.4deg; }
+
+.pa-card-feature {
+  width: clamp(120px, 17vw, 176px);
+}
+
+.pa-img-wrap {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #e8e0d8;
+}
+.pa-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.pa-label {
+  font-family: var(--script);
+  font-size: clamp(9px, 1.5vw, 12px);
+  color: #3a3030;
+  text-align: center;
+  margin: 5px 0 0;
+  line-height: 1.25;
+  opacity: 0.8;
+}
+
+/* footer */
+.pa-footer {
+  text-align: center;
+  padding: 4px 24px clamp(20px, 4vw, 32px);
+  flex-shrink: 0;
+}
+
+/* chapter marker override for dark background */
+.slide-photoalbum .chapter-marker .cm-num  { color: var(--gold); }
+.slide-photoalbum .chapter-marker .cm-rule { background: linear-gradient(90deg, var(--gold), transparent); opacity: .45; }
+.slide-photoalbum .chapter-marker .cm-title { color: var(--gold); opacity: .75; }
+
+.pa-quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(12px, 2.4vw, 15px);
+  color: var(--rose-2);
+  margin: 0 0 14px;
+  opacity: 0.85;
+  letter-spacing: 0.01em;
+}
+
+.btn.ghost.pa-btn {
+  color: var(--gold);
+  border-color: rgba(198,161,91,.4);
+}
+.btn.ghost.pa-btn:hover,
+.btn.ghost.pa-btn:focus-visible {
+  background: rgba(198,161,91,.1);
+  border-color: var(--gold);
+}
+
+/* reduced motion: freeze strips */
+@media (prefers-reduced-motion: reduce) {
+  .strip-fwd .pa-strip-inner,
+  .strip-rev .pa-strip-inner { animation: none !important; }
+}
+
+/* ============================================================
    REDUCED MOTION
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
