@@ -222,6 +222,11 @@ body::before {
   text-transform: lowercase;
   color: var(--gold-2);
   z-index: 5;
+  background: rgba(250, 247, 240, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 4px;
+  padding: 3px 10px 3px 4px;
 }
 .chapter-marker .cm-num {
   font-family: var(--display);
@@ -1821,6 +1826,7 @@ body::before {
 }
 
 /* chapter marker override for dark background */
+.slide-photoalbum .chapter-marker { background: rgba(24, 11, 15, 0.82); }
 .slide-photoalbum .chapter-marker .cm-num  { color: var(--gold); }
 .slide-photoalbum .chapter-marker .cm-rule { background: linear-gradient(90deg, var(--gold), transparent); opacity: .45; }
 .slide-photoalbum .chapter-marker .cm-title { color: var(--gold); opacity: .75; }
@@ -1875,7 +1881,9 @@ body::before {
   border-left: 3px solid var(--rose);
   margin-top: 8px !important;
 }
+.slide-personal { padding-top: clamp(72px, 9vw, 110px); }
 @media (max-width: 640px) {
+  .slide-personal { padding-top: 72px; }
   .personal-paper { padding: 24px 18px; }
   .personal-finale-note { padding: 14px 16px !important; }
 }
