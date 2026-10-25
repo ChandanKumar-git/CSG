@@ -132,7 +132,8 @@ const Sound = (() => {
 
   const playBg = () => {
     if (bgPlaying || muted) return;
-    bg.play().then(() => { bgPlaying = true; }).catch(() => {});
+    bgPlaying = true; // set sync so parallel calls don't double-trigger
+    bg.play().catch(() => { bgPlaying = false; }); // reset if blocked
   };
 
   const setMuted = (v) => {
@@ -143,6 +144,7 @@ const Sound = (() => {
       bg.pause();
       const ve = document.getElementById("voice-hb"); if (ve) ve.pause();
     } else {
+      bgPlaying = false; // allow playBg to retry after unmute
       playBg();
     }
     const btn = document.getElementById("sound-toggle");
@@ -168,19 +170,14 @@ const Sound = (() => {
   };
   mountToggle();
 
-  // Try autoplay immediately; if blocked, retry on first gesture
-  const tryStart = () => {
-    ensure();
-    playBg();
-  };
-  tryStart();
-  const onFirstGesture = () => {
-    ensure();
-    playBg();
-  };
-  window.addEventListener("click",      onFirstGesture, { once: true, passive: true, capture: true });
-  window.addEventListener("touchstart", onFirstGesture, { once: true, passive: true, capture: true });
-  window.addEventListener("keydown",    onFirstGesture, { once: true, passive: true });
+  // Try autoplay immediately (works on desktop); on mobile retry on first gesture.
+  // Use capture phase so we fire before any element handler consumes the event.
+  ensure();
+  playBg();
+  const onFirstGesture = () => { ensure(); playBg(); };
+  ["touchstart","touchend","pointerdown","click"].forEach(evt =>
+    window.addEventListener(evt, onFirstGesture, { once: true, passive: true, capture: true })
+  );
 
   // Preload voice list (some browsers populate it async)
   if ("speechSynthesis" in window) {
@@ -314,15 +311,15 @@ window.addEventListener("touchend", (e) => {
   const voiceEl = document.getElementById("voice-hb");
   const cut = () => {
     if (cake.classList.contains("cut")) return;
-    cake.classList.add("cut");
-    caption.textContent = "a slice for the birthday girl ✦";
-    setTimeout(() => continueBtn.classList.remove("hidden"), 1200);
-    // play voice directly in gesture handler — most reliable on iOS/Android
+    // voice first — iOS requires play() as early as possible in the gesture handler
     if (!Sound.muted && voiceEl) {
       voiceEl.currentTime = 0;
       voiceEl.volume = 0.85;
       voiceEl.play().catch(() => {});
     }
+    cake.classList.add("cut");
+    caption.textContent = "a slice for the birthday girl ✦";
+    setTimeout(() => continueBtn.classList.remove("hidden"), 1200);
     Sound.birthdayJingle();
     confettiBurst(cake, 22, ["#C6A15B", "#D8A7A7", "#702D3A", "#E4CFA2"]);
   };
