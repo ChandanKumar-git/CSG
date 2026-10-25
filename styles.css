@@ -1536,7 +1536,7 @@ body::before {
   .slide-wish[data-layout="left"] .wish-stage { direction: ltr; }
   .wish-photo { max-width: 260px; }
   .photo-frame { padding: 8px 8px; transform: rotate(-1deg); }
-  .photo-frame img { aspect-ratio: unset; height: auto; object-fit: unset; }
+  .photo-frame img { aspect-ratio: auto !important; height: auto !important; object-fit: fill !important; }
   .slide-wish[data-layout="left"] .photo-frame { transform: rotate(1deg); }
   .photo-frame.polaroid { padding: 10px 10px 28px; }
   .wish-photo::before,
