@@ -56,30 +56,25 @@ const Sound = (() => {
     src.start(now);
   };
 
-  // play a recorded audio file via Web Audio API (works in setTimeout — no gesture lock)
-  const audioDecodeCache = new Map();
+  // play a recorded audio file — unlocked on first gesture so setTimeout play works on mobile
+  const audioElCache = new Map();
+  const getAudioEl = (src) => {
+    if (!audioElCache.has(src)) {
+      const a = new Audio(src);
+      a.preload = "auto";
+      audioElCache.set(src, a);
+    }
+    return audioElCache.get(src);
+  };
   const playFile = (src) =>
     new Promise((resolve, reject) => {
-      const ac = ensure();
-      if (!ac) { reject(new Error('no ctx')); return; }
-      const startPlayback = (buffer) => {
-        const node = ac.createBufferSource();
-        const gain = ac.createGain();
-        gain.gain.value = 0.92;
-        node.buffer = buffer;
-        node.connect(gain).connect(ac.destination);
-        node.onended = resolve;
-        node.start(0);
-      };
-      const cached = audioDecodeCache.get(src);
-      if (cached instanceof AudioBuffer) { startPlayback(cached); return; }
-      if (cached instanceof Promise) { cached.then(startPlayback).catch(reject); return; }
-      const p = fetch(src)
-        .then(r => r.arrayBuffer())
-        .then(ab => ac.decodeAudioData(ab))
-        .then(buf => { audioDecodeCache.set(src, buf); return buf; });
-      audioDecodeCache.set(src, p);
-      p.then(startPlayback).catch(reject);
+      if (muted) { resolve(); return; }
+      const a = getAudioEl(src);
+      a.currentTime = 0;
+      a.volume = 0.92;
+      a.onended = resolve;
+      a.onerror = reject;
+      a.play().catch(reject);
     });
 
   // speak a line — prefers a recorded clip if `voiceFile` is supplied and exists.
@@ -173,10 +168,14 @@ const Sound = (() => {
   mountToggle();
 
   // iOS / modern browsers need a user gesture to unlock audio.
-  // The first click or touch anywhere unlocks it and starts bg music.
+  // The first click or touch anywhere unlocks it and starts bg music + pre-unlocks voice.
   const unlock = () => {
     ensure();
     startBg();
+    // Pre-unlock the voice file so it can play later inside setTimeout without gesture
+    const voice = getAudioEl("./audio/happy-birthday.mp3");
+    voice.volume = 0;
+    voice.play().then(() => { voice.pause(); voice.currentTime = 0; voice.volume = 0.92; }).catch(() => {});
     window.removeEventListener("click", unlock);
     window.removeEventListener("touchstart", unlock);
   };
