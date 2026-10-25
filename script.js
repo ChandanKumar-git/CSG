@@ -56,19 +56,30 @@ const Sound = (() => {
     src.start(now);
   };
 
-  // play a recorded audio file (user's own voice) if present, else fall back to TTS
-  const audioCache = new Map();
+  // play a recorded audio file via Web Audio API (works in setTimeout — no gesture lock)
+  const audioDecodeCache = new Map();
   const playFile = (src) =>
     new Promise((resolve, reject) => {
-      let a = audioCache.get(src);
-      if (!a) { a = new Audio(src); a.preload = "auto"; audioCache.set(src, a); }
-      a.currentTime = 0;
-      a.volume = 0.95;
-      const done = () => { a.removeEventListener("ended", done); a.removeEventListener("error", err); resolve(); };
-      const err  = (e) => { a.removeEventListener("ended", done); a.removeEventListener("error", err); reject(e); };
-      a.addEventListener("ended", done, { once: true });
-      a.addEventListener("error", err, { once: true });
-      a.play().catch(err);
+      const ac = ensure();
+      if (!ac) { reject(new Error('no ctx')); return; }
+      const startPlayback = (buffer) => {
+        const node = ac.createBufferSource();
+        const gain = ac.createGain();
+        gain.gain.value = 0.92;
+        node.buffer = buffer;
+        node.connect(gain).connect(ac.destination);
+        node.onended = resolve;
+        node.start(0);
+      };
+      const cached = audioDecodeCache.get(src);
+      if (cached instanceof AudioBuffer) { startPlayback(cached); return; }
+      if (cached instanceof Promise) { cached.then(startPlayback).catch(reject); return; }
+      const p = fetch(src)
+        .then(r => r.arrayBuffer())
+        .then(ab => ac.decodeAudioData(ab))
+        .then(buf => { audioDecodeCache.set(src, buf); return buf; });
+      audioDecodeCache.set(src, p);
+      p.then(startPlayback).catch(reject);
     });
 
   // speak a line — prefers a recorded clip if `voiceFile` is supplied and exists.
