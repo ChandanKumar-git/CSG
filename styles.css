@@ -505,6 +505,8 @@ body::before {
    ============================================================ */
 .slide-letter {
   gap: 20px;
+  justify-content: flex-start;
+  align-items: center;
 }
 .letter-paper {
   position: relative;
@@ -1856,13 +1858,15 @@ body::before {
    ============================================================ */
 .slide-personal {
   gap: 20px;
+  justify-content: flex-start;
+  align-items: center;
   background:
     radial-gradient(700px 500px at 50% 10%, rgba(236,212,169,0.45), transparent 70%),
     radial-gradient(600px 500px at 50% 95%, var(--rose-mist), transparent 70%),
     radial-gradient(400px 400px at 10% 50%, var(--blush), transparent 70%),
     radial-gradient(400px 400px at 90% 50%, var(--blush-2), transparent 70%);
 }
-.personal-paper { max-width: 680px; }
+.personal-paper { max-width: 680px; width: 100%; }
 .personal-italic {
   font-family: var(--display) !important;
   font-style: italic !important;
