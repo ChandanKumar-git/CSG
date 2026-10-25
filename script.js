@@ -128,11 +128,11 @@ const Sound = (() => {
   bg.loop = true;
   bg.volume = 0.12;
   bg.preload = "auto";
-  let bgStarted = false;
-  const startBg = () => {
-    if (bgStarted || muted) return;
-    bgStarted = true;
-    bg.play().catch(() => {});
+  let bgPlaying = false;
+
+  const playBg = () => {
+    if (bgPlaying || muted) return;
+    bg.play().then(() => { bgPlaying = true; }).catch(() => {});
   };
 
   const setMuted = (v) => {
@@ -141,9 +141,9 @@ const Sound = (() => {
     if (muted) {
       if ("speechSynthesis" in window) try { window.speechSynthesis.cancel(); } catch {}
       bg.pause();
-      const v = document.getElementById("voice-hb"); if (v) v.pause();
+      const ve = document.getElementById("voice-hb"); if (ve) ve.pause();
     } else {
-      if (bgStarted) bg.play().catch(() => {});
+      playBg();
     }
     const btn = document.getElementById("sound-toggle");
     if (btn) {
@@ -168,16 +168,19 @@ const Sound = (() => {
   };
   mountToggle();
 
-  // iOS / modern browsers need a user gesture to unlock audio.
-  // The first click or touch anywhere unlocks it and starts bg music + pre-unlocks voice.
-  const unlock = () => {
+  // Try autoplay immediately; if blocked, retry on first gesture
+  const tryStart = () => {
     ensure();
-    startBg();
-    window.removeEventListener("click", unlock);
-    window.removeEventListener("touchstart", unlock);
+    playBg();
   };
-  window.addEventListener("click", unlock, { once: true, passive: true });
-  window.addEventListener("touchstart", unlock, { once: true, passive: true });
+  tryStart();
+  const onFirstGesture = () => {
+    ensure();
+    playBg();
+  };
+  window.addEventListener("click",      onFirstGesture, { once: true, passive: true, capture: true });
+  window.addEventListener("touchstart", onFirstGesture, { once: true, passive: true, capture: true });
+  window.addEventListener("keydown",    onFirstGesture, { once: true, passive: true });
 
   // Preload voice list (some browsers populate it async)
   if ("speechSynthesis" in window) {
