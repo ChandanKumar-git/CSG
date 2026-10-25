@@ -141,6 +141,7 @@ const Sound = (() => {
     if (muted) {
       if ("speechSynthesis" in window) try { window.speechSynthesis.cancel(); } catch {}
       bg.pause();
+      const v = document.getElementById("voice-hb"); if (v) v.pause();
     } else {
       if (bgStarted) bg.play().catch(() => {});
     }
@@ -172,10 +173,6 @@ const Sound = (() => {
   const unlock = () => {
     ensure();
     startBg();
-    // Pre-unlock the voice file so it can play later inside setTimeout without gesture
-    const voice = getAudioEl("./audio/happy-birthday.mp3");
-    voice.volume = 0;
-    voice.play().then(() => { voice.pause(); voice.currentTime = 0; voice.volume = 0.92; }).catch(() => {});
     window.removeEventListener("click", unlock);
     window.removeEventListener("touchstart", unlock);
   };
@@ -311,16 +308,20 @@ window.addEventListener("touchend", (e) => {
   const caption = document.getElementById("cake-caption");
   const continueBtn = document.getElementById("cake-continue");
 
+  const voiceEl = document.getElementById("voice-hb");
   const cut = () => {
     if (cake.classList.contains("cut")) return;
     cake.classList.add("cut");
     caption.textContent = "a slice for the birthday girl ✦";
     setTimeout(() => continueBtn.classList.remove("hidden"), 1200);
-    confettiBurst(cake, 22, ["#C6A15B", "#D8A7A7", "#702D3A", "#E4CFA2"]);
-    // sound: jingle + voice — both called directly in the gesture handler (no setTimeout)
-    // so iOS/Android never blocks the audio.play() call
+    // play voice directly in gesture handler — most reliable on iOS/Android
+    if (!Sound.muted && voiceEl) {
+      voiceEl.currentTime = 0;
+      voiceEl.volume = 0.85;
+      voiceEl.play().catch(() => {});
+    }
     Sound.birthdayJingle();
-    Sound.say("Happy Birthday, Gullu!", { voiceFile: "./audio/happy-birthday.mp3" });
+    confettiBurst(cake, 22, ["#C6A15B", "#D8A7A7", "#702D3A", "#E4CFA2"]);
   };
   cake.addEventListener("click", cut);
   cake.addEventListener("keydown", (e) => {
