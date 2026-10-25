@@ -317,9 +317,10 @@ window.addEventListener("touchend", (e) => {
     caption.textContent = "a slice for the birthday girl ✦";
     setTimeout(() => continueBtn.classList.remove("hidden"), 1200);
     confettiBurst(cake, 22, ["#C6A15B", "#D8A7A7", "#702D3A", "#E4CFA2"]);
-    // sound: jingle, then voice
+    // sound: jingle + voice — both called directly in the gesture handler (no setTimeout)
+    // so iOS/Android never blocks the audio.play() call
     Sound.birthdayJingle();
-    setTimeout(() => Sound.say("Happy Birthday, Gullu!", { pitch: 1.15, rate: 0.95, voiceFile: "./audio/happy-birthday.mp3" }), 900);
+    Sound.say("Happy Birthday, Gullu!", { voiceFile: "./audio/happy-birthday.mp3" });
   };
   cake.addEventListener("click", cut);
   cake.addEventListener("keydown", (e) => {
