@@ -1845,6 +1845,41 @@ body::before {
   border-color: var(--gold);
 }
 
+/* ============================================================
+   SLIDE 22 · PERSONAL LETTER
+   ============================================================ */
+.slide-personal {
+  gap: 20px;
+  background:
+    radial-gradient(700px 500px at 50% 10%, rgba(236,212,169,0.45), transparent 70%),
+    radial-gradient(600px 500px at 50% 95%, var(--rose-mist), transparent 70%),
+    radial-gradient(400px 400px at 10% 50%, var(--blush), transparent 70%),
+    radial-gradient(400px 400px at 90% 50%, var(--blush-2), transparent 70%);
+}
+.personal-paper { max-width: 680px; }
+.personal-italic {
+  font-family: var(--display) !important;
+  font-style: italic !important;
+  font-size: clamp(16px, 1.9vw, 19px) !important;
+  color: var(--burgundy) !important;
+  text-align: center;
+  padding: 14px 0 !important;
+  border-top: 1px solid var(--hairline) !important;
+  border-bottom: 1px solid var(--hairline) !important;
+  margin: 4px 0 !important;
+}
+.personal-finale-note {
+  background: linear-gradient(135deg, var(--blush-2) 0%, var(--rose-mist) 100%);
+  border-radius: 6px;
+  padding: 16px 20px !important;
+  border-left: 3px solid var(--rose);
+  margin-top: 8px !important;
+}
+@media (max-width: 640px) {
+  .personal-paper { padding: 24px 18px; }
+  .personal-finale-note { padding: 14px 16px !important; }
+}
+
 /* reduced motion: freeze strips */
 @media (prefers-reduced-motion: reduce) {
   .strip-fwd .pa-strip-inner,
