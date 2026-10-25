@@ -591,3 +591,51 @@ document.querySelectorAll(".slide-welcome .btn, .slide-finale .btn").forEach((bt
     );
   } catch {}
 })();
+
+/* -------------------------------------------------------
+   8) Password lock — personal letter slide
+   ------------------------------------------------------- */
+(() => {
+  const overlay  = document.getElementById("lock-overlay");
+  const input    = document.getElementById("lock-input");
+  const btn      = document.getElementById("lock-btn");
+  const errEl    = document.getElementById("lock-error");
+  if (!overlay || !input || !btn) return;
+
+  const PASS = "chandan001";
+  const KEY  = "csg-letter-unlocked";
+
+  const unlock = () => {
+    overlay.classList.add("unlocked");
+    sessionStorage.setItem(KEY, "1");
+    input.blur();
+  };
+
+  const attempt = () => {
+    if (input.value === PASS) {
+      errEl.classList.add("hidden");
+      unlock();
+    } else {
+      errEl.classList.remove("hidden");
+      input.classList.remove("shake");
+      void input.offsetWidth; // reflow to restart animation
+      input.classList.add("shake");
+      input.value = "";
+      input.focus();
+    }
+  };
+
+  btn.addEventListener("click", attempt);
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter") attempt(); });
+
+  // auto-unlock if already entered this session
+  if (sessionStorage.getItem(KEY) === "1") unlock();
+
+  // focus input when slide becomes active
+  window.addEventListener("slide-changed", (e) => {
+    const personalIdx = slides.findIndex(s => s.classList.contains("slide-personal"));
+    if (e.detail.index === personalIdx && !overlay.classList.contains("unlocked")) {
+      setTimeout(() => input.focus(), 300);
+    }
+  });
+})();

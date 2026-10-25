@@ -893,6 +893,17 @@
            21 · PERSONAL LETTER · from the heart
            ============================================================ -->
       <section class="slide slide-personal" data-slide>
+        <!-- password lock overlay -->
+        <div class="lock-overlay" id="lock-overlay" role="dialog" aria-label="Enter password to read">
+          <div class="lock-box">
+            <div class="lock-icon">🔒</div>
+            <p class="lock-hint">This note is just for you.<br>Enter the secret to open it.</p>
+            <input id="lock-input" class="lock-input" type="password" placeholder="password…" autocomplete="off" maxlength="40" />
+            <button class="lock-btn" id="lock-btn" type="button">Open ✦</button>
+            <p class="lock-error hidden" id="lock-error">Wrong password — try again.</p>
+          </div>
+        </div>
+
         <div class="chapter-marker">
           <span class="cm-num">19</span>
           <span class="cm-rule"></span>
